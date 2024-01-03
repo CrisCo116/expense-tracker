@@ -11,13 +11,13 @@ type Profile {
 }
 
 type Query {
-    user: User
+    users: [User]
 }
 
 type Mutation {
     signout: String
-    signup: String
-    login(email: String, password: String): String
+    signup(email: String, password: String): User
+    login(email: String, password: String): User
 }
 `;
 
