@@ -12,7 +12,7 @@
   }
   ```
 */
-export default function Example() {
+export default function login() {
   return (
     <>
       {/*

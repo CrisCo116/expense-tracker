@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css'
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         element: <Home />
       }, {
         path: '/login',
-        element: <Login />
+        element: <login />
       }, {
         path: '/signup',
         element: <Signup />
