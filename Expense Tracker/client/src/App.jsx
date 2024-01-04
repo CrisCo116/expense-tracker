@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
+import Nav from './components/Header';
 
 function useBodyClass(className) {
   useEffect(() => {
@@ -12,10 +13,11 @@ function useBodyClass(className) {
 }
 
 function App() {
-  useBodyClass('bg-zinc-500');
+  useBodyClass('bg-white');
 
   return (
     <div>
+      <Nav />
       <Outlet />
     </div>
   );
