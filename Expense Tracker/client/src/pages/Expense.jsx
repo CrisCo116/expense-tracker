@@ -1,36 +1,53 @@
-import { Doughnut } from 'react-chartjs-2';
+// Import necessary dependencies
+import { Chart as ChartJS, defaults } from 'chart.js/auto'; // Import ChartJS library
+import { Bar } from 'react-chartjs-2'; // Import Bar chart component from react-chartjs-2
 
+import userData from '../Data/ExpenseData'; // Import expense data
+
+// Modify default ChartJS configurations
+defaults.maintainAspectRatio = false; // Disable aspect ratio to adjust chart size
+defaults.responsive = true; // Enable responsiveness
+defaults.plugins.title.display = true; // Display title plugin by default
+defaults.plugins.title.align = "start"; // Align title text to the start
+defaults.plugins.title.font.size = 20; // Set title font size
+defaults.plugins.title.color = "black"; // Set title color
+
+// React component to display the expense data
 export default function Expense() {
-  const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-      {
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+    // Flatten the expenses of all users into a single array
+    const allExpenses = userData.flatMap(user => user.expenses);
 
-  return (
-    <div>
-      <h1>Expense</h1>
-      <Doughnut data={data} />
-    </div>
-  );
+    return (
+        <div className='w-full flex justify-center h-[50rem]'>
+            <div className='max-w-screen-xl'>
+                <h1>Expense</h1>
+                <div className='w-[25rem] h-[25rem]'> {/* Adjust the width and height of the chart */}
+                    <Bar
+                        data={{
+                            labels: allExpenses.map((expense) => expense.category), // Define labels for the chart (expense categories)
+                            datasets: [
+                                {
+                                    label: "Cost", // Label for the dataset
+                                    data: allExpenses.map((expense) => expense.amount), // Data representing the amounts
+                                    backgroundColor: [ // Colors for the bars
+                                        "rgba(43, 63, 229, 0.8)",
+                                        "rgba(250, 192, 19, 0.8)",
+                                        "rgba(253, 135, 135, 0.8)",
+                                    ],
+                                    borderRadius: 5, // Border radius for the bars
+                                },
+                            ],
+                        }}
+                        options={{
+                            plugins: {
+                                title: {
+                                    text: "Monthly Expenses", // Title for the chart
+                                },
+                            },
+                        }}
+                    />
+                </div>
+            </div>
+        </div>
+    );
 }
