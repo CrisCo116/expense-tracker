@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Nav from './components/Header';
+import Footer from './components/Footer';
 
 function useBodyClass(className) {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
     <div>
       <Nav />
       <Outlet />
+      <Footer />
     </div>
   );
 }
