@@ -21,7 +21,7 @@ const resolvers = {
                 throw new Error('Email and password are required');
             }
             
-            if (password.length < 8) {
+            if (password.length < 1) {
                 throw new Error('Password must be at least 8 characters'); 
             }
             
