@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 import Nav from './components/Header';
 
 function useBodyClass(className) {
@@ -17,10 +16,10 @@ function App() {
   useBodyClass('bg-white');
 
   return (
-    <Router>
+    <div>
       <Nav />
       <Outlet />
-      </Router>
+    </div>
   );
 }
 
