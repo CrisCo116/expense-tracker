@@ -16,6 +16,7 @@ const fixedExpenseSchema = new Schema({
     },
     category: {
         type: String,
+        // enum: ['food', 'housing', 'transportation', 'clothing', 'utilities', 'insurance', 'medical', 'savings', 'personal', 'entertainment', 'miscellaneous'],
         // required: true,
     },
     frequency: {
