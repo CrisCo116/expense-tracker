@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-
 export default function Expenses() {
   const [expenseData, setExpenseData] = useState({
     amount: '',

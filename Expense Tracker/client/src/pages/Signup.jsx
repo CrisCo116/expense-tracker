@@ -8,7 +8,7 @@ export default function SignUp() {
                     src="./src/assets/DALL·E 2024-01-03 18.30.23 - .png"
                     alt="Your Company" 
                     />
-                     <h2 className="mb-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                    <h2 className="mb-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Sign up for a new account
                     </h2>
 
