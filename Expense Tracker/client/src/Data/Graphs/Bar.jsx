@@ -1,6 +1,6 @@
 // Import necessary dependencies
 import { Chart as ChartJS, defaults } from 'chart.js/auto'; // Import ChartJS library
-import { Bar } from 'react-chartjs-2'; // Import Bar chart component from react-chartjs-2
+import { Doughnut } from 'react-chartjs-2'; // Import Bar chart component from react-chartjs-2
 
 import userData from '../ExpenseData'; // Import expense data
 
@@ -12,37 +12,55 @@ defaults.plugins.title.align = "start"; // Align title text to the start
 defaults.plugins.title.font.size = 20; // Set title font size
 defaults.plugins.title.color = "black"; // Set title color
 
-// React component to display the expense data
+
 export default function Bars() {
-    // Flatten the expenses of all users into a single array
+    
     const allExpenses = userData.flatMap(user => user.expenses);
 
     return (
-        <div className='w-full flex justify-center h-[50rem]'>
-            <div className='max-w-screen-xl'>
-                <div className='w-[25rem] h-[25rem]'> {/* Adjust the width and height of the chart */}
-                    <Bar
+        <div className='w-full flex justify-center'>
+            <div className='max-w-screen-xl w-full'> 
+                <div className='w-full h-[25rem]'> 
+                    <Doughnut
                         data={{
-                            labels: allExpenses.map((expense) => expense.category), // Define labels for the chart (expense categories)
+                            labels: allExpenses.map((expense) => expense.category),
                             datasets: [
                                 {
-                                    label: "Cost", // Label for the dataset
-                                    data: allExpenses.map((expense) => expense.amount), // Data representing the amounts
-                                    backgroundColor: [ // Colors for the bars
-                                        "rgba(43, 63, 229, 0.8)",
-                                        "rgba(250, 192, 19, 0.8)",
-                                        "rgba(253, 135, 135, 0.8)",
+                                    label: 'Cost',
+                                    data: allExpenses.map((expense) => expense.amount),
+                                    backgroundColor: [
+                                        'red',
+                                        'green',
+                                        'blue',
+                                        'orange',
                                     ],
-                                    borderRadius: 5, // Border radius for the bars
+                                    borderRadius: 5,
                                 },
                             ],
                         }}
                         options={{
+                            responsive: true, // Make the chart responsive
+                            maintainAspectRatio: false, // Allow the chart to resize based on its container's dimensions
+                            aspectRatio: 3, // Set the aspect ratio to a specific value (e.g., 2)
                             plugins: {
                                 title: {
-                                    text: "Monthly Expenses", // Title for the chart
+                                    display: true,
+                                    text: 'Monthly Expenses',
+                                    padding: {
+                                        top: 10,
+                                        bottom: 30,
+                                    },
+                                    align: 'center',
                                 },
-                            },
+                                legend: {
+                                    position: 'bottom', // Position the legend at the bottom of the chart
+                                    labels: {
+                                        padding: 20, // Add padding to the legend labels
+                                    },
+                                },
+                            }, 
+                            cutout: 100,
+                            
                         }}
                     />
                 </div>
