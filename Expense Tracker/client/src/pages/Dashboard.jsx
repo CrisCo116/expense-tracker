@@ -13,6 +13,7 @@ export default function Dashboard() {
             <div className="border w-full md:w-1/4 h-screen">
                 <div className="py-[5rem]">
                     <Bars/>
+                    
                 </div>
             </div>
             </div>

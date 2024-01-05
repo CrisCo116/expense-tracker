@@ -2,7 +2,7 @@
 import { Chart as ChartJS, defaults } from 'chart.js/auto'; // Import ChartJS library
 import { Doughnut } from 'react-chartjs-2'; // Import Bar chart component from react-chartjs-2
 
-import userData from '../ExpenseData'; // Import expense data
+import userData from '../UserData/ExpenseData'; // Import expense data
 
 // Modify default ChartJS configurations
 defaults.maintainAspectRatio = false; // Disable aspect ratio to adjust chart size
