@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Nav from './components/Header';
+
 import Footer from './components/Footer';
 
 function useBodyClass(className) {
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <div>
-      {location.pathname !== '/' && <Nav />}
+     {location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/signup' && <Nav />}
       <Outlet />
       <Footer />
     </div>
