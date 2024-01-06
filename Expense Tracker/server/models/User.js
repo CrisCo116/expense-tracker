@@ -27,7 +27,7 @@ userSchema.pre('save', function (next) {
             this.password = hash;
             next();
         } catch (error) {
-            next(error);
+            next(new Error(error));
         }
     } else {
         next();
@@ -38,7 +38,7 @@ userSchema.methods.isCorrectPassword = async function (password) {
     try {
         return await bcrypt.compare(password, this.password);
     } catch (error) {
-        throw new Error(error);
+        return Promise.reject(new Error(error));
     }
 };
 
