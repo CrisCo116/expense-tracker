@@ -13,7 +13,7 @@ export default function Nav() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="" className="h-8" alt="" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-lime-500 lg:text-5xl">Spend Smart</span>
+          <span className="self-center text-2xl font-semibold whitespace-nowrap text-lime-500 lg:text-5xl">SpendSmart</span>
         </Link>
         <button onClick={toggleMenu} type="button" className="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-hamburger" aria-expanded="false">
           <span className="sr-only">Open main menu</span>

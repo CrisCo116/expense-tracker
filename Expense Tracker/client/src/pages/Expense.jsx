@@ -1,38 +1,61 @@
 import { useState } from 'react';
-import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+
+import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Switch, FormControlLabel, FormGroup } from '@mui/material';
 
 export default function Expenses() {
   const [expenseData, setExpenseData] = useState({
-    amount: '',
+    amount: '0.00',
     description: '',
     category: '',
-    timestamp: '', // Initially empty, set to current date in the form element
+    timestamp: '', 
+    checkNumber: '',
+    note: '',// Initially empty, set to current date in the form element
   });
+
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [amountError, setAmountError] = useState(false);
 
   // Mock expenses data
   const [expenses, setExpenses] = useState([
-    { id: 1, amount: 50, description: 'Groceries', category: 'Food', timestamp: '2023-01-01' },
-    { id: 2, amount: 20, description: 'Bus ticket', category: 'Transportation', timestamp: '2023-01-02' },
+    { id: 1, amount: 50, description: 'Groceries', category: 'Food', timestamp: '2024-01-01' },
+    { id: 2, amount: 20, description: 'Bus ticket', category: 'Transportation', timestamp: '2024-01-02' },
     // Add more mock data as needed
   ]);
 
-  const handleChange = (event) => {
+  const handleAmountClick = (event) => {
+    event.target.select();
+  };
+
+  const handleBlur = (event) => {
+    if (event.target.name === "amount" && (!event.target.value.trim() || parseFloat(event.target.value) === 0)) {
+      setExpenseData({ ...expenseData, amount: '0.00' });
+      setAmountError(true);
+    }
+  };
+  
+
+    const handleChange = (event) => {
     const { name, value } = event.target;
-    setExpenseData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setExpenseData({ ...expenseData, [name]: value });
+  
+    // Reset amountError if a valid amount is entered
+    if (name === "amount" && value.trim() && parseFloat(value) !== 0) {
+      setAmountError(false);
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle the form submission to add the expense.
-    console.log(expenseData);
-    // Add the new expense to the expenses array (this should be replaced with an API call)
-    setExpenses([...expenses, { ...expenseData, id: expenses.length + 1 }]);
-    // Reset the form fields
+    // Convert amount to a number with two decimal places
+    const formattedExpense = {
+      ...expenseData,
+      amount: parseFloat(expenseData.amount).toFixed(2),
+      id: expenses.length + 1
+    };
+    setExpenses([...expenses, formattedExpense]);
     setExpenseData({ amount: '', description: '', category: '', timestamp: '' });
   };
+  
 
   return (
     <div className="expenses-container p-4">
@@ -45,11 +68,15 @@ export default function Expenses() {
           type="number"
           value={expenseData.amount}
           onChange={handleChange}
+          onClick={handleAmountClick}
+          onBlur={handleBlur}
+          error={amountError}
+          helperText={amountError ? "Please enter an amount for this transaction" : ""}
           margin="normal"
         />
         <TextField
           className="w-1/2"
-          label="Description"
+          label="Where did you spend this money?"
           name="description"
           value={expenseData.description}
           onChange={handleChange}
@@ -90,6 +117,33 @@ export default function Expenses() {
             shrink: true,
           }}
         />
+        {/* ... other fields ... */}
+        <FormGroup>
+          <FormControlLabel 
+            control={<Switch checked={showMoreOptions} onChange={() => setShowMoreOptions(!showMoreOptions)} />}
+            label="+More Options"
+          />
+        </FormGroup>
+        {showMoreOptions && (
+          <>
+            <TextField
+              className="w-1/2"
+              label="Check #"
+              name="checkNumber"
+              value={expenseData.checkNumber}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
+              className="w-1/2"
+              label="Note"
+              name="note"
+              value={expenseData.note}
+              onChange={handleChange}
+              margin="normal"
+            />
+          </>
+        )}
         <Button type="submit" variant="contained" color="primary" className="w-1/2">
           Add Expense
         </Button>
@@ -108,7 +162,7 @@ export default function Expenses() {
           <TableBody>
             {expenses.map((expense) => (
               <TableRow key={expense.id}>
-                <TableCell>{expense.amount}</TableCell>
+                <TableCell>${expense.amount}</TableCell>
                 <TableCell>{expense.description}</TableCell>
                 <TableCell>{expense.category}</TableCell>
                 <TableCell>{expense.timestamp}</TableCell>

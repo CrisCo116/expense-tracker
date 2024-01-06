@@ -5,7 +5,7 @@ import Home from './pages/Home.jsx'
 import Error from './pages/Error.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
-// import Income from './pages/Income.jsx'
+import Income from './pages/Income.jsx'
 import Expense from './pages/Expense.jsx'
 import Debt from './pages/Debt.jsx'
 import Dashboard from './pages/Dashboard.jsx'
@@ -33,6 +33,9 @@ const router = createBrowserRouter([
       }, {
         path: '/expense',
         element: <Expense />
+      }, {
+        path: '/income',
+        element: <Income />
       }, {
         path: '/debt',
         element: <Debt />
