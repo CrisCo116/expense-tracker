@@ -10,13 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
-    "axios": "^1.6.4",
+    "apollo-server-express": "^3.13.0",
     "chart.js": "^4.4.1",
     "framer": "^2.4.1",
+    "jwt-decode": "^4.0.0",
     "motion": "^10.16.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",

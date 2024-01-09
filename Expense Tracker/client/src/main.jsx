@@ -34,6 +34,9 @@ const router = createBrowserRouter([
         path: '/expense',
         element: <Expense />
       }, {
+        path: '/income',
+        element: <Income />
+      }, {
         path: '/debt',
         element: <Debt />
       }, {

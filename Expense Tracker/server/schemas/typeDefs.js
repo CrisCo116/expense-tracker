@@ -31,9 +31,14 @@ type Query {
 
 type Mutation {
     signout: String
-    signup(email: String, password: String): User
-    login(email: String, password: String): User
+    signup(email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
 }
+
+type Auth {
+    token: ID!
+    user: User
+  }
 `;
 
 module.exports = typeDefs;
