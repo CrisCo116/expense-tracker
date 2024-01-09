@@ -13,7 +13,7 @@ defaults.plugins.title.font.size = 20; // Set title font size
 defaults.plugins.title.color = "black"; // Set title color
 
 
-export default function Bars() {
+export default function SummaryGraph() {
     
     const allExpenses = userData.flatMap(user => user.expenses);
 
@@ -45,7 +45,7 @@ export default function Bars() {
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Monthly Expenses',
+                                    text: 'Summary',
                                     padding: {
                                         top: 10,
                                         bottom: 30,

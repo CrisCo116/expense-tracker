@@ -1,4 +1,4 @@
-import Bars from "../Data/Graphs/Bar"
+import Card from "../Data/Cards/Card"
 
 export default function Dashboard() {
     return (
@@ -12,7 +12,7 @@ export default function Dashboard() {
             </div>
             <div className="border w-full md:w-1/4 h-screen">
                 <div className="py-[5rem]">
-                    <Bars/>
+                    <Card />
                     
                 </div>
             </div>
