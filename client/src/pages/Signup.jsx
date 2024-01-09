@@ -1,9 +1,10 @@
 import { SIGN_UP } from "../utils/mutations";
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
 
 
-export default function SignUp() {
+const SignUpForm = () => {
     const [SignupFormData, setSignupFormData] = useState({ email: '', password: '' });
     const [showAlert, setShowAlert] = useState(false);
 
@@ -24,8 +25,11 @@ export default function SignUp() {
                     password: SignupFormData.password,
                 },
             });
-
             console.log('Sign-up successful:', data);
+
+            const { token, user } = data.signUp;
+            console.log('API response:', { token, user });
+            Auth.login(token);
 
             // Redirect to the login page after successful signup
             window.location.href = '/login';
@@ -126,3 +130,5 @@ export default function SignUp() {
         </div>
     );
 }
+
+export default SignUpForm;
