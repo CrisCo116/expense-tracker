@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
     "apollo-server-express": "^3.13.0",
+    "axios": "^1.6.5",
     "chart.js": "^4.4.1",
     "framer": "^2.4.1",
     "jwt-decode": "^4.0.0",
