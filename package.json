@@ -10,7 +10,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "jwt-decode": "^4.0.0"
   }
 }
