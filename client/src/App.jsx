@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import { Outlet, useLocation } from 'react-router-dom';
 import Nav from './components/Header';
 import Footer from './components/Footer';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
 function useBodyClass(className) {
   useEffect(() => {
@@ -20,9 +20,13 @@ function App() {
 
   const location = useLocation();
 
-  // Create an instance of Apollo Client
+  // Create an instance of Apollo Client with createHttpLink
+  const httpLink = createHttpLink({
+    uri: '/graphql',
+  });
+
   const client = new ApolloClient({
-    uri: 'your-graphql-endpoint', // Replace with your GraphQL endpoint
+    link: httpLink,
     cache: new InMemoryCache(),
   });
 

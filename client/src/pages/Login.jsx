@@ -7,7 +7,7 @@ const LoginForm = () => {
   const [loginFormData, setLoginFormData] = useState({ email: "", password: "" });
   const [showAlert, setShowAlert] = useState(false);
 
-  const loginUser = useMutation(LOGIN_USER);
+  const [loginMutation, { error, data }] = useMutation(LOGIN_USER);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,39 +18,31 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const { data } = await loginUser({
+      const { data } = await loginMutation({
         variables: { ...loginFormData },
       });
-      console.log("Login successful:", data);
 
-      const { token, user } = data.loginUser;
-      console.log("API response:", { token, user });
-      Auth.loginUser(token);
+      if (data) {
+        console.log("Login successful:", data);
 
-      // Redirect to the homepage after successful login
-      window.location.href = "/";
+        const { token, user } = data.login;
+        console.log("API response:", { token, user });
+        Auth.login(token);
+
+        // Redirect to the homepage after successful login
+        window.location.href = "/dashboard";
+      }
     } catch (error) {
-      console.log(error)
       console.error("Login error:", error.message);
       setShowAlert(true);
     }
   };
 
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
+  // Check for GraphQL errors
+  if (error) {
+    console.error("GraphQL error:", error.message);
+    // Handle error or update UI accordingly
   }
-  ```
-*/
-
   return (
     <>
       {/*
@@ -69,7 +61,8 @@ const LoginForm = () => {
             alt="Your Company"
           />
           <h2 className="mt- mb-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+
+          Log into to your account
           </h2>
 
         </div>
@@ -133,7 +126,7 @@ const LoginForm = () => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Login
               </button>
             </div>
           </form>
@@ -150,9 +143,9 @@ const LoginForm = () => {
             <a
               href="/signup"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            onClick={() => {
-              window.location.href = "/signup";
-            }}
+              onClick={() => {
+                window.location.href = "/signup";
+              }}
             >
               sign up now
             </a>

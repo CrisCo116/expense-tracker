@@ -8,7 +8,7 @@ const SignUpForm = () => {
     const [SignupFormData, setSignupFormData] = useState({ email: '', password: '' });
     const [showAlert, setShowAlert] = useState(false);
 
-    const [signUp] = useMutation(SIGN_UP);
+    const [signUpMutation, { data }] = useMutation(SIGN_UP);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -19,10 +19,15 @@ const SignUpForm = () => {
         e.preventDefault();
 
         try {
-            const { data } = await signUp({ variables: { ...SignupFormData } });
-            console.log('Sign-up successful:', data);
+            const response = await signUpMutation({
+                variables: { ...SignupFormData },
+            });
 
-            const { token, user } = data.signUp;
+            console.log('Sign-up successful:', response.data);
+
+            // Check if 'signup' is directly under 'response.data'
+            const { token, user } = response.data.signup;
+
             console.log('API response:', { token, user });
             Auth.login(token);
 
