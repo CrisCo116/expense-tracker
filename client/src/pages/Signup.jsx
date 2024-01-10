@@ -8,7 +8,7 @@ const SignUpForm = () => {
     const [SignupFormData, setSignupFormData] = useState({ email: '', password: '' });
     const [showAlert, setShowAlert] = useState(false);
 
-    const signUp = useMutation(SIGN_UP);
+    const [signUp] = useMutation(SIGN_UP);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -19,10 +19,7 @@ const SignUpForm = () => {
         e.preventDefault();
 
         try {
-            const { data } = await signUp({
-                variables: { ...SignupFormData
-                },
-            });
+            const { data } = await signUp({ variables: { ...SignupFormData } });
             console.log('Sign-up successful:', data);
 
             const { token, user } = data.signUp;
