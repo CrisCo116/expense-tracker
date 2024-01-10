@@ -61,7 +61,8 @@ const LoginForm = () => {
             alt="Your Company"
           />
           <h2 className="mt- mb-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Login to your account
+
+          Log into to your account
           </h2>
 
         </div>
