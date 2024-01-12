@@ -1,32 +1,72 @@
-import { useState } from 'react';
-import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Switch, FormControlLabel, FormGroup } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Select,
+  MenuItem,
+} from '@mui/material';
+import { ADD_INCOME_SOURCE } from '../utils/mutations';
+import { GET_USER } from '../utils/queries';
 
 export default function Income() {
   const [incomeData, setIncomeData] = useState({
     amount: '0.00',
     source: '',
-    date: '',
+    frequency: 'Monthly',
     checkNumber: '',
     note: '',
   });
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [amountError, setAmountError] = useState(false);
 
-  const [incomes, setIncomes] = useState([
-    { id: 1, amount: 1000, source: 'Salary', date: '2024-01-01' },
-    { id: 2, amount: 200, source: 'Freelance', date: '2024-01-05' },
-    // More mock data or fetched from an API
-  ]);
+  const userId = localStorage.getItem('user_id');
+
+  const [addIncomeSource] = useMutation(ADD_INCOME_SOURCE, {
+    onCompleted: (data) => {
+      console.log('Mutation completed:', data);
+
+      // Update the state with the new income
+      setIncomes([...incomes, data.addIncomeSource]); // Assuming 'addIncomeSource' is the key in your response
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const { loading, error, data: userData, refetch } = useQuery(GET_USER, {
+    variables: { userId },
+  });
+
+  useEffect(() => {
+    if (userData && userData.getUser && userData.getUser.profile) {
+      setIncomes(userData.getUser.profile.incomes);
+    }
+  }, [userData]);
+
+  const [incomes, setIncomes] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    if (loading === false) {
+      setIsDataLoaded(true);
+    }
+  }, [loading]);
 
   const handleBlur = (event) => {
     if (!event.target.value.trim()) {
-        setIncomeData({ ...incomeData, amount: '0.00' });
-        setAmountError(true);
+      setIncomeData({ ...incomeData, amount: '0.00' });
+      setAmountError(true);
     } else {
-        setAmountError(false);
+      setAmountError(false);
     }
-};
-
+  };
 
   const handleAmountClick = (event) => {
     event.target.select();
@@ -35,20 +75,38 @@ export default function Income() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setIncomeData({ ...incomeData, [name]: value });
-};
 
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Convert amount to a number with two decimal places
-    const formattedIncome = {
-      ...incomeData,
-      amount: parseFloat(incomeData.amount).toFixed(2),
-      id: incomes.length + 1
-    };
-    setIncomes([...incomes, formattedIncome]);
-    setIncomeData({ amount: '', source: '', date: '' });
+    // Reset amountError if a valid amount is entered
+    if (name === 'amount' && value.trim() && parseFloat(value) !== 0) {
+      setAmountError(false);
+    }
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await addIncomeSource({
+        variables: {
+          source: incomeData.source,
+          incomeAmount: parseFloat(incomeData.amount),
+          frequency: incomeData.frequency,
+        },
+      });
+
+      // Reset form data
+      setIncomeData({ amount: '', source: '', frequency: 'Monthly', checkNumber: '', note: '' });
+
+      // Refetch user data to get the updated incomes
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  if (!isDataLoaded) return null;
 
   return (
     <div className="income-container p-4">
@@ -64,61 +122,40 @@ export default function Income() {
           onClick={handleAmountClick}
           onBlur={handleBlur}
           error={amountError}
-          helperText={amountError ? "Please enter an amount for this transaction" : ""}
-          margin="normal"
+          helperText={amountError ? 'Please enter an amount for this income' : ''}
+          margin="dense"
         />
         <TextField
           className="w-1/2"
-          label="Where did this money come from?"
+          label="Source"
           name="source"
           value={incomeData.source}
           onChange={handleChange}
-          margin="normal"
+          margin="dense"
         />
-        <TextField
+        {/* Dropdown for Frequency */}
+        <Select
           className="w-1/2"
-          label="Date"
-          name="date"
-          type="date"
-          value={incomeData.date}
+          label="Frequency"
+          name="frequency"
+          value={incomeData.frequency}
           onChange={handleChange}
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
+          displayEmpty
+          inputProps={{ 'aria-label': 'Frequency' }}
+          margin="dense"
+        >
+          <MenuItem value="" disabled>
+            Frequency
+          </MenuItem>
+          <MenuItem value="Monthly">Monthly</MenuItem>
+          {/* Add more frequency options as needed */}
+        </Select>
         {/* ... other fields ... */}
-        <FormGroup>
-          <FormControlLabel 
-            control={<Switch checked={showMoreOptions} onChange={() => setShowMoreOptions(!showMoreOptions)} />}
-            label="+More Options"
-          />
-        </FormGroup>
-        {showMoreOptions && (
-          <>
-            <TextField
-              className="w-1/2"
-              label="Check #"
-              name="checkNumber"
-              value={incomeData.checkNumber}
-              onChange={handleChange}
-              margin="normal"
-            />
-            <TextField
-              className="w-1/2"
-              label="Note"
-              name="note"
-              value={incomeData.note}
-              onChange={handleChange}
-              margin="normal"
-            />
-          </>
-        )}
         <Button type="submit" variant="contained" color="primary" className="w-1/2">
           Add Income
         </Button>
       </form>
-      
+
       {/* Table to display incomes */}
       <TableContainer component={Paper} className="mt-8">
         <Table>
@@ -126,15 +163,15 @@ export default function Income() {
             <TableRow>
               <TableCell>Amount</TableCell>
               <TableCell>Source</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell>Frequency</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {incomes.map((income) => (
-              <TableRow key={income.id}>
-                <TableCell>${income.amount}</TableCell>
+              <TableRow key={income.source}>
+                <TableCell>${income.incomeAmount}</TableCell>
                 <TableCell>{income.source}</TableCell>
-                <TableCell>{income.date}</TableCell>
+                <TableCell>{income.frequency}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.8",
+    "@apollo/client": "^3.8.9",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.3",
@@ -19,7 +19,8 @@
     "axios": "^1.6.5",
     "chart.js": "^4.4.1",
     "framer": "^2.4.1",
-    "jwt-decode": "^4.0.0",
+    "jwt-decode": "^3.1.2",
+    "link-context": "^0.0.12",
     "motion": "^10.16.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
