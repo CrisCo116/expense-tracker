@@ -5,19 +5,34 @@ const typeDefs = `
     fixedExpenses: [FixedExpense]
     incomes: [Income]
   }
-
-  type FixedExpense {
-    expenseAmount: Float
-    description: String
+  
+type FixedExpense {
+    id: ID!
+    description: String!
+    expenseAmount: Float!
+    frequency: String!
+    dueDate: String
     category: String
-    frequency: String
+    userId: ID!
   }
 
-  input FixedExpenseInput {
-    expenseAmount: Float
-    description: String
+  input AddFixedExpenseInput {
+    description: String!
+    expenseAmount: Float!
+    frequency: String!
+    dueDate: String
     category: String
+    userId: ID!
+  }
+
+  input UpdateFixedExpenseInput {
+    id: ID!
+    description: String
+    amount: Float
     frequency: String
+    dueDate: String
+    category: String
+    userId: ID
   }
 
   type Income {
@@ -42,7 +57,10 @@ const typeDefs = `
     signup(email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
     addIncomeSource(source: String!, incomeAmount: Float!): Income
-  }
+    addFixedExpense(input: AddFixedExpenseInput!): FixedExpense
+    updateFixedExpense(input: UpdateFixedExpenseInput!): FixedExpense
+    deleteFixedExpense(id: ID!): String
+}
 
   type Auth {
     token: ID

@@ -1,4 +1,6 @@
 const { User, Income } = require('../models');
+const { User, FixedExpense } = require('../models');
+const bcrypt = require('bcrypt');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -55,6 +57,7 @@ const resolvers = {
                 });
             });
         },
+      
         addIncomeSource: async (_, { source, incomeAmount }, context) => {
             try {
                 if (!context.user) {
@@ -78,6 +81,41 @@ const resolvers = {
                 throw error; // Ensure you're re-throwing the error to let Apollo Client catch it
             }
         },
+
+        addFixedExpense: async (_, { input }) => {
+            try {
+              const newFixedExpense = new FixedExpense(input);
+              await newFixedExpense.save();
+              return newFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error creating fixed expense');
+            }
+          },
+          updateFixedExpense: async (_, { input }) => {
+            try {
+              const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
+                 _id,
+                { $set: input },
+                { new: true }
+              );
+              return updatedFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error updating fixed expense');
+            }
+          },
+          deleteFixedExpense: async (_, { _id }) => {
+            try {
+              const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
+                _id
+              );
+              return deletedFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error deleting fixed expense');
+            }
+          }
     },
 };
 
