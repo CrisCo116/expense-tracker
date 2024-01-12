@@ -5,11 +5,33 @@ type User {
 }
 
 type FixedExpense {
-    expenseAmount: Float
-    description: String
+    id: ID!
+    description: String!
+    amount: Float!
+    frequency: String!
+    dueDate: String
     category: String
+    userId: ID!
+  }
+
+  input AddFixedExpenseInput {
+    description: String!
+    amount: Float!
+    frequency: String!
+    dueDate: String
+    category: String
+    userId: ID!
+  }
+
+  input UpdateFixedExpenseInput {
+    id: ID!
+    description: String
+    amount: Float
     frequency: String
-}
+    dueDate: String
+    category: String
+    userId: ID
+  }
 
 type Income {
     source: String
@@ -33,6 +55,9 @@ type Mutation {
     signout: String
     signup(email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
+    addFixedExpense(input: AddFixedExpenseInput!): FixedExpense
+    updateFixedExpense(input: UpdateFixedExpenseInput!): FixedExpense
+    deleteFixedExpense(id: ID!): String
 }
 
 type Auth {

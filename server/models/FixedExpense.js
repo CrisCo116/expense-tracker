@@ -1,30 +1,34 @@
 const { Schema, model } = require('mongoose');
 
 const fixedExpenseSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+        description: {
+        type: String,
         required: true,
-    },
-    expenseAmount: {
+        trim: true,
+      },
+      amount: {
         type: Number,
         required: true,
-    },
-    description: {
+      },
+      frequency: {
         type: String,
         required: true,
-    },
-    category: {
+        enum: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+      },
+      dueDate: {
+        type: Date,
+        required: false, // Set to true if due date is mandatory
+      },
+      category: {
         type: String,
-        // enum: ['food', 'housing', 'transportation', 'clothing', 'utilities', 'insurance', 'medical', 'savings', 'personal', 'entertainment', 'miscellaneous'],
-        // required: true,
-    },
-    frequency: {
-        type: String,
-        enum: ['daily', 'weekly', 'monthly', 'yearly'],
-        required: true,
-    },
-});
+        required: false, // Set to true if category is mandatory
+        enum: ['Mortgage/Rent', 'Food', 'Utilities', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Other'],
+      },
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      }
+    });
 
 const FixedExpense = model('FixedExpense', fixedExpenseSchema);
 
