@@ -44,11 +44,11 @@ export default function MarketData() {
 
   // Process the fetched data to create labels and datasets for the Line Chart
   const chartData = {
-    labels: symbols, // Use symbols as labels for the x-axis
+    labels: symbols, // Use the company symbols as labels for the x-axis
     datasets: [
       {
         label: "Stock Prices",
-        data: data.map((item) => item.c), // Adjust this based on the structure of your fetched data
+        data: data.map((item) => item.c), // Use the numbers as data for the y-axis
         fill: false,
         borderColor: "blue",
         backgroundColor: "transparent",

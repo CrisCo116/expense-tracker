@@ -61,9 +61,9 @@ type Mutation {
 }
 
 type Auth {
-    token: ID!
+    token: ID
     user: User
-  }
+}
 `;
 
 module.exports = typeDefs;
