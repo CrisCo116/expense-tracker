@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
-const { Profile, profileSchema } = require('./Profile');
 const bcrypt = require('bcrypt');
+const { FixedExpense } = require('./FixedExpense');
+const { Income } = require('./Income');
 
 const userSchema = new Schema({
     email: {
@@ -13,10 +14,28 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    profile: {
-        type: profileSchema,
-        default: {},
-    },
+    fixedExpenses: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'FixedExpense',
+        },
+    ],
+    incomes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Income',
+        },
+    ],
+});
+
+userSchema.pre('find', function (next) {
+    this.populate('fixedExpenses incomes');
+    next();
+});
+
+userSchema.pre('findOne', function (next) {
+    this.populate('fixedExpenses incomes');
+    next();
 });
 
 userSchema.pre('save', function (next) {
