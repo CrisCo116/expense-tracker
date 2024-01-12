@@ -1,4 +1,5 @@
-const { User } = require('../models');
+const { User, FixedExpense } = require('../models');
+const bcrypt = require('bcrypt');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -42,6 +43,40 @@ const resolvers = {
                 });
             });
         },
+        addFixedExpense: async (_, { input }) => {
+            try {
+              const newFixedExpense = new FixedExpense(input);
+              await newFixedExpense.save();
+              return newFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error creating fixed expense');
+            }
+          },
+          updateFixedExpense: async (_, { input }) => {
+            try {
+              const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
+                 _id,
+                { $set: input },
+                { new: true }
+              );
+              return updatedFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error updating fixed expense');
+            }
+          },
+          deleteFixedExpense: async (_, { _id }) => {
+            try {
+              const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
+                _id
+              );
+              return deletedFixedExpense;
+            } catch (error) {
+              console.error(error);
+              throw new Error('Error deleting fixed expense');
+            }
+          }
     },
 };
 
