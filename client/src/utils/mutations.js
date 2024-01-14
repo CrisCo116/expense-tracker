@@ -5,6 +5,7 @@ export const SIGN_UP = gql`
     signup(email: $email, password: $password) {
       token
       user {
+        _id
         email
       }
     }
@@ -18,6 +19,16 @@ export const LOGIN_USER = gql`
       user {
         email
       }
+    }
+  }
+`;
+
+export const ADD_INCOME_SOURCE = gql`
+  mutation addIncomeSource($source: String!, $incomeAmount: Float!) {
+    addIncomeSource(source: $source, incomeAmount: $incomeAmount) {
+      source
+      incomeAmount
+      frequency
     }
   }
 `;

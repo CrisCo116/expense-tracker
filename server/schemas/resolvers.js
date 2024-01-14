@@ -1,4 +1,4 @@
-const { User, FixedExpense } = require('../models');
+const { User, FixedExpense, Income } = require('../models');
 const bcrypt = require('bcrypt');
 const { signToken, AuthenticationError } = require('../utils/auth');
 

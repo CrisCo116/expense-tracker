@@ -4,6 +4,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Nav from './components/Header';
 import Footer from './components/Footer';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import AuthService from './utils/auth';
 
 function useBodyClass(className) {
   useEffect(() => {
@@ -25,8 +27,18 @@ function App() {
     uri: '/graphql',
   });
 
+  const authLink = setContext((_, { headers }) => {
+    const token = AuthService.getToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    };
+  });
+
   const client = new ApolloClient({
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 

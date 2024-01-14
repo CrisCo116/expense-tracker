@@ -1,13 +1,15 @@
 const typeDefs = `
-type User {
-    email: String
-    profile: Profile
-}
-
+  type User {
+    _id: ID!
+    email: String!
+    fixedExpenses: [FixedExpense]
+    incomes: [Income]
+  }
+  
 type FixedExpense {
     id: ID!
     description: String!
-    amount: Float!
+    expenseAmount: Float!
     frequency: String!
     dueDate: String
     category: String
@@ -16,7 +18,7 @@ type FixedExpense {
 
   input AddFixedExpenseInput {
     description: String
-    amount: Float
+    expenseAmount: Float
     frequency: String
     dueDate: String
     category: String
@@ -33,37 +35,39 @@ type FixedExpense {
     userId: ID
   }
 
-type Income {
+  type Income {
     source: String
     incomeAmount: Float
     frequency: String
-}
+  }
 
-type Profile {
-    firstName: String
-    lastName: String
-    occupation: String
-    fixedExpenses: [FixedExpense]
-    incomes: [Income]
-}
+  input IncomeInput {
+    source: String
+    incomeAmount: Float
+    frequency: String
+  }
 
-type Query {
+  type Query {
     users: [User]
-}
+    getUser(userId: ID!): User
+  }
 
-type Mutation {
+  type Mutation {
     signout: String
     signup(email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
+    addIncomeSource(source: String!, incomeAmount: Float!): Income
     addFixedExpense(input: AddFixedExpenseInput!): FixedExpense
     updateFixedExpense(input: UpdateFixedExpenseInput!): FixedExpense
     deleteFixedExpense(id: ID!): String
 }
 
-type Auth {
+  type Auth {
     token: ID
     user: User
-}
+  }
 `;
 
 module.exports = typeDefs;
+
+

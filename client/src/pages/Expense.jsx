@@ -82,9 +82,14 @@ export default function Expenses() {
         }
     } catch (error) {
         console.error('Error adding expense:', error);
-        // Handle error appropriately
-    }
-  };
+        if (error.networkError) {
+          console.error('Network error:', error.networkError);
+      }
+      if (error.graphQLErrors) {
+          error.graphQLErrors.forEach(err => console.error('GraphQL error:', err));
+      }
+  }
+};
   
   // Handler for updating an existing expense
   const handleUpdateExpense = async (expenseId) => {

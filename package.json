@@ -14,8 +14,10 @@
     "concurrently": "^8.2.2"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.9",
     "@mui/lab": "^5.0.0-alpha.160",
     "dotenv": "^16.3.1",
-    "jwt-decode": "^4.0.0"
+    "jwt-decode": "^4.0.0",
+    "link-context": "^0.0.12"
   }
 }
