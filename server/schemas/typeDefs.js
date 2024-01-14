@@ -9,7 +9,7 @@ const typeDefs = `
 type FixedExpense {
     id: ID!
     description: String!
-    expenseAmount: Float!
+    amount: Float!
     frequency: String!
     dueDate: String
     category: String
@@ -18,7 +18,7 @@ type FixedExpense {
 
   input AddFixedExpenseInput {
     description: String
-    expenseAmount: Float
+    amount: Float
     frequency: String
     dueDate: String
     category: String
