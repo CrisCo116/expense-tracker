@@ -45,6 +45,7 @@ const resolvers = {
         },
         addFixedExpense: async (_, { input }) => {
             try {
+              console.log(input)
               const newFixedExpense = new FixedExpense(input);
               await newFixedExpense.save();
               return newFixedExpense;

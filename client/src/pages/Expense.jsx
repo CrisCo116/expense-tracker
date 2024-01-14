@@ -3,8 +3,8 @@ import { useMutation } from '@apollo/client';
 import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Switch, FormControlLabel, FormGroup } from '@mui/material';
 import { ADD_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE } from '../utils/mutations';
 
-
 export default function Expenses() {
+  // State hooks for various components of the expense data
   const [expenseData, setExpenseData] = useState({
     amount: '0.00',
     description: '',
@@ -13,24 +13,32 @@ export default function Expenses() {
     note: '',
   });
 
+  // State for additional UI elements
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [amountError, setAmountError] = useState(false);
+
+  // Apollo Client mutations
   const [addExpenseMutation] = useMutation(ADD_EXPENSE);
   const [updateExpenseMutation] = useMutation(UPDATE_EXPENSE);
   const [deleteExpenseMutation] = useMutation(DELETE_EXPENSE);
-  const [dueDate, setDueDate] = useState('');
-  const [repeatFrequency, setRepeatFrequency] = useState('');
 
+  // States for date and frequency inputs
+  const [dueDate, setDueDate] = useState('');
+  const [frequency, setFrequency] = useState('');
+
+  // Mock expenses data state
   const [expenses, setExpenses] = useState([
-    { id: 1, amount: 50, description: 'Groceries', category: 'Food', timestamp: '2024-01-01' },
-    { id: 2, amount: 20, description: 'Bus ticket', category: 'Transportation', timestamp: '2024-01-02' },
-    // Add more mock data as needed
+    // Initial mock data for testing
+    { id: 1, amount: 50, description: 'Groceries', category: 'Food', dueDate: '2024-01-01' },
+    { id: 2, amount: 20, description: 'Bus ticket', category: 'Transportation', dueDate: '2024-01-02' },
   ]);
 
+  // Event handler to select the amount input text
   const handleAmountClick = (event) => {
-    event.target.select();
+  event.target.select();
   };
 
+  // Event handler for when input loses focus
   const handleBlur = (event) => {
     if (event.target.name === "amount" && (!event.target.value.trim() || parseFloat(event.target.value) === 0)) {
       setExpenseData({ ...expenseData, amount: '0.00' });
@@ -38,27 +46,47 @@ export default function Expenses() {
     }
   };
 
-  // Handle input changes
+  // General input change handler
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setExpenseData({ ...expenseData, [name]: value });
-  
-    // Reset amountError if a valid amount is entered
+   const { name, value } = event.target;
+   setExpenseData({ ...expenseData, [name]: value });
+
     if (name === "amount" && value.trim() && parseFloat(value) !== 0) {
       setAmountError(false);
     }
   };
 
-  const handleAddExpense = async () => {
+  // Handler for adding a new expense
+  const handleAddExpense = async (event) => {
+    event.preventDefault();
     try {
-        const { data } = await addExpenseMutation({ variables: { input: expenseData } });
-        setExpenses([...expenses, data.addFixedExpense]);
-        setExpenseData({ amount: '0.00', description: '', category: '', checkNumber: '', note: '', dueDate: '', repeatFrequency: '' });
+        // Prepare the expense data for mutation
+        const expenseInput = {
+            description: expenseData.description,
+            amount: parseFloat(expenseData.amount),
+            dueDate: dueDate,
+            frequency: frequency,
+            category: expenseData.category,
+            userId: '659e1502e08faca90ac7c039' // Example user ID, replace with actual user ID
+        };
+        console.log('Adding expense with data:', expenseInput);
+        const { data } = await addExpenseMutation({
+            variables: { input: expenseInput }
+        });
+        // Reset form fields
+        if (data && data.addFixedExpense) {
+            setExpenses([...expenses, data.addFixedExpense]);
+            setExpenseData({ amount: '0.00', description: '', category: ''});
+            setDueDate('');
+            setFrequency('');
+        }
     } catch (error) {
         console.error('Error adding expense:', error);
+        // Handle error appropriately
     }
   };
-
+  
+  // Handler for updating an existing expense
   const handleUpdateExpense = async (expenseId) => {
     try {
         const { data } = await updateExpenseMutation({ variables: { input: { ...expenseData, id: expenseId } } });
@@ -68,6 +96,7 @@ export default function Expenses() {
     }
   };
 
+  // Handler for deleting an existing expense
   const handleDeleteExpense = async (expenseId) => {
     try {
         await deleteExpenseMutation({ variables: { id: expenseId } });
@@ -77,36 +106,22 @@ export default function Expenses() {
     }
   };
 
+  // Event handler for changes in due date
   const handleDueDateChange = (event) => {
     setDueDate(event.target.value);
   };
 
+  // Event handler for changes in frequency
   const handleFrequencyChange = (event) => {
-    setRepeatFrequency(event.target.value);
+    setFrequency(event.target.value);
   };
-
-{/*  
-  How it originally was handling the AddExpense
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newExpense = {
-        ...expenseData,
-        dueDate,
-        repeatFrequency,
-        id: expenses.length + 1
-    };
-    setExpenses([...expenses, newExpense]);
-    setExpenseData({ amount: '0.00', description: '', category: '', checkNumber: '', note: '' });
-    setDueDate('');
-    setRepeatFrequency('');
-}; */}
 
   return (
     <div className="expenses-container p-4">
       <h1 className="text-2xl font-bold mb-4">Add Expense</h1>
+      {/* Form for adding or updating expenses */}
       <form onSubmit={handleAddExpense} noValidate autoComplete="off" className="flex flex-col gap-4">
-        {/* Here was handleSubmit */}
-        {/* Amount Field */}
+      {/* Input fields for expense data */}
         <TextField
           className="w-1/2"
           label="Amount"
@@ -145,7 +160,8 @@ export default function Expenses() {
           margin="normal"
         >
           <option value=""></option>
-          <option value="Mortgage/Rent">Mortgage/Rent</option>
+          <option value="Mortgage">Mortgage</option>
+          <option value="Rent">Rent</option>
           <option value="Food">Food</option>
           <option value="Utilities">Utilities</option>
           <option value="Transportation">Transportation</option>
@@ -173,7 +189,7 @@ export default function Expenses() {
           className="w-1/2"
           label="Repeat Frequency"
           name="repeat frequency"
-          value={repeatFrequency}
+          value={frequency}
           onChange={handleFrequencyChange}
           select
           SelectProps={{
@@ -182,10 +198,10 @@ export default function Expenses() {
           margin="normal"
         >
           <option value=""></option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
         </TextField>
 
         {/* More Options */}
@@ -235,18 +251,24 @@ export default function Expenses() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {/* Mapping over expenses to display each as a table row */}
             {expenses.map((expense) => (
-              <TableRow key={expense.id}>
-                <TableCell>${expense.amount}</TableCell>
-                <TableCell>{expense.description}</TableCell>
-                <TableCell>{expense.category}</TableCell>
-                <TableCell>{expense.dueDate}</TableCell>
-                <TableCell>{expense.repeatFrequency}</TableCell>
-                <Button onClick={() => handleUpdateExpense(expense.id)}>Update</Button>
-                <Button onClick={() => handleDeleteExpense(expense.id)}>Delete</Button>
-              </TableRow>
-            ))}
-          </TableBody>
+            <TableRow key={expense.id}>
+            {/* Displaying expense data in table cells */}
+            <TableCell>${expense.amount}</TableCell>
+            <TableCell>{expense.description}</TableCell>
+            <TableCell>{expense.category}</TableCell>
+            <TableCell>{new Date(expense.dueDate).toLocaleDateString()}</TableCell>
+            <TableCell>{expense.frequency}</TableCell>
+            <TableCell>
+              <Button onClick={() => handleUpdateExpense(expense.id)}>Update</Button>
+            </TableCell>
+            <TableCell>
+              <Button onClick={() => handleDeleteExpense(expense.id)}>Delete</Button>
+            </TableCell>
+          </TableRow>
+          ))}
+        </TableBody>
         </Table>
       </TableContainer>
     </div>

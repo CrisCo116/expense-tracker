@@ -1,159 +1,98 @@
-# expense-tracker
-Future home for final project of bootcamp
+# SpendSmart
 
-# 23 Final Project: MERN Stack Single-Page Application
+## Table of Contents
+- [Introduction](#introduction)
+- [Description](#description)
+- [User Story](#user-story)
+- [Acceptance Criteria](#acceptance-criteria)
+- [Screenshot](#screenshot)
+- [Links](#links)
+- [Future Development](#future-development)
+- [License](#license)
+- [Questions](#questions)
 
-Projects have played a key role in your journey to becoming a full-stack web developer. As you apply for development jobs, your portfolio is absolutely vital to opening doors to opportunities. Your portfolio showcases high-quality deployed examples of your work, and you can use your finished projects for that very purpose.
+## Description
 
-This project is a fantastic opportunity to show employers your collaborative skills and coding abilities, especially in the context of a scalable, user-focused MERN app. Remember that employers want to see what you can do, but they also want to see how you work with other developers. The more examples of deployed collaborative work you have in your portfolio, the more likely you are to get an interview and a job.
+Expense Tracker is a MERN stack single-page application designed to assist users in managing their finances effectively. It allows users to track their daily, weekly, monthly, and yearly expenses, integrating a user-friendly interface and real-time data processing. The application is built with React for the front end, GraphQL with a Node.js and Express.js server, and MongoDB along with Mongoose ODM for the database.
 
-## Project Requirements
+## User Story
 
-Your group will use everything you’ve learned throughout this course to create a MERN stack single-page application that works with real-world data to solve a real-world challenge, with a focus on data and user demand. This project will provide you with the best opportunity to demonstrate your problem-solving skills, which employers will want to see during interviews. Once again, the user story and acceptance criteria will depend on the project that you create, but your project must fulfill the following requirements:
+```md
+AS a fincancially-conscious individual, I WANT a simple and intutive application to track my expenses, SO THAT I can manage my budget more efficiently and make informed financial decisions.
 
-* Use React for the front end.
+```
 
-* Use GraphQL with a Node.js and Express.js server.
+## Acceptance Criteria
 
-* Use MongoDB and the Mongoose ODM for the database.
+```md
+Expense Tracking and Management
+GIVEN a secure login page,
 
-* Use queries and mutations for retrieving, adding, updating, and deleting data.
+WHEN I enter my credentials,
+THEN I am authenticated and granted access to my expense dashboard.
+GIVEN the dashboard interface,
 
-* Be deployed using Heroku (with data).
+WHEN I input new expense details and submit,
+THEN the expense is added to my financial records.
+GIVEN existing expenses listed,
 
-* Have a polished UI.
+WHEN I choose to edit or delete an expense,
+THEN the expense record is updated or removed accordingly.
+GIVEN an option to view expenses by categories (like food, utilities, etc.),
 
-* Be responsive.
+WHEN I select a category,
+THEN I see a filtered view of expenses in that category.
+Data Visualization and Analysis
+GIVEN a feature to visualize expenses,
 
-* Be interactive (i.e., accept and respond to user input).
+WHEN I access this feature,
+THEN I see graphical representations (like charts or graphs) of my expenses over time.
+GIVEN an option to set a budget,
 
-* Include authentication (JWT).
+WHEN I input my monthly budget,
+THEN I receive alerts or notifications if my spending approaches or exceeds this limit.
+Responsiveness and Real-Time Updates
+GIVEN a need to access the tracker on different devices,
 
-* Protect sensitive API key information on the server.
+WHEN I open the application on a phone, tablet, or desktop,
+THEN the interface adjusts for optimal viewing and interaction.
+GIVEN the real-time update feature,
 
-* Have a clean repository that meets quality coding standards (file structure, naming conventions, best practices for class and id naming conventions, indentation, high-quality comments, etc.).
+WHEN I add, edit, or delete an expense,
+THEN these changes are reflected immediately without needing to refresh the page.
+Security and Data Protection
+GIVEN the requirement to protect sensitive data,
 
-* Have a high-quality README (with unique name, description, technologies used, screenshot, and link to deployed application).
+WHEN I use the application,
+THEN my financial data and API keys are securely stored and not exposed to unauthorized users.
+GIVEN the application's deployment on Heroku,
 
-### CSS Styling
+WHEN I access the application online,
+THEN I can use all its features as intended, with consistent performance and data integrity.
 
-Instead of using a CSS library like Bootstrap, consider one of the following suggestions:
+```
 
-* Look into the concept of CSS-in-JS, which abstracts CSS to the component level, using JavaScript to describe styles in a declarative and maintainable way. Some popular libraries include [styled-components](https://styled-components.com/) and [Emotion](https://emotion.sh/docs/introduction).
+## Screenshot
 
-* Try using a component library, such as [Semantic UI](https://semantic-ui.com/), [Chakra UI](https://chakra-ui.com/), or [Ant Design](https://ant.design/).
+The following image shows the Expense Tracker application's appearance and functionality:
 
-* Create all the CSS for your application just using CSS.
+![Homepage of website.](./public/images/.png)
 
-Ultimately, it doesn't matter which of these options you choose&mdash;it just needs to look professional and be mobile-friendly.
+## Links
+Deployed Application: [SpendSmart Live](https://spendsmartapp.render.com)<br>
 
-### Payment Platform
+Github Repository: [SpendSmart Repo](https://github.com/CrisCo116/expense-tracker)
 
-Consider integrating the Stripe payment platform. Even if you don’t create an e-commerce application, you could set up your site to accept charitable donations.
+## Future Development
 
-### Bonus
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses) This project is licensed under the MIT License.
 
-Although this is not a requirement for your project, see if you can also implement functionality to meet the minimum requirements of a PWA:
+## Questions
+If you have any questions or encounter any issues, please feel free to [open an issue](https://github.com/CrisCo116/expense-tracker/issues) or contact us directly:<br>
 
-* Uses a web manifest
-
-* Uses a service worker for offline functionality
-
-* Is installable
-
-## Presentation Requirements
-
-Use this [project presentation template](https://docs.google.com/presentation/d/10QaO9KH8HtUXj__81ve0SZcpO5DbMbqqQr4iPpbwKks/edit?usp=sharing) to address the following:
-
-* Elevator pitch: a one minute description of your application
-
-* Concept: What is your user story? What was your motivation for development?
-
-* Process: What were the technologies used? How were tasks and roles broken down and assigned? What challenges did you encounter? What were your successes?
-
-* Demo: Show your stuff!
-
-* Directions for Future Development
-
-* Links to the deployed application and the GitHub repository. Use the [Guide to Deploy with Heroku and MongoDB Atlas](https://coding-boot-camp.github.io/full-stack/mongodb/deploy-with-heroku-and-mongodb-atlas) on The Full-Stack Blog if you need a reminder on how to deploy to Heroku.
-
-## Grading Requirements
-
-This project is graded based on the following criteria:
-
-### Technical Acceptance Criteria: 25%
-
-* Satisfies the following code requirements:
-
-  * Application uses React for the front end.
-
-  * Application has a GraphQL API with a Node.js and Express.js server, and uses queries and mutations for retrieving, adding, updating, and deleting data.
-
-  * Application uses MongoDB and the Mongoose ODM for the database and protects sensitive API key information on the server.
-
-  * Application includes user authentication using JWT.
-
-### Concept 10%
-
-* Application should be a unique and novel idea.
-
-* Your group should clearly and concisely articulate your project idea.
-
-### Deployment: 20%
-
-* Application deployed at live URL on Heroku and loads with no errors.
-
-* Application GitHub URL submitted.
-
-### Repository Quality: 10%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class and id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains a high-quality README file with description, screenshot, and link to deployed application.
-
-### Application Quality: 15%
-
-* Application user experience is intuitive and easy to navigate.
-
-* Application user interface style is clean and polished.
-
-* Application is responsive.
-
-### Presentation 10%
-
-* Your group should present using a slide deck.
-
-* Every group member should speak during the presentation.
-
-* Your presentation should follow the [Project Presentation Template](https://docs.google.com/presentation/d/10QaO9KH8HtUXj__81ve0SZcpO5DbMbqqQr4iPpbwKks/edit?usp=sharing).
-
-### Collaboration 10%
-
-* There are no major disparities in the number of GitHub contributions between group members.
-
-### Bonus
-
-Fulfilling all three of the following requirements to turn your app into a PWA will add 10 points to your grade. Note that the highest grade you can achieve is still a 100:
-
-* Uses a web manifest
-
-* Uses a service worker for offline functionality
-
-* Is installable
-
-## How to Submit Your MERN Stack Single-Page Application
-
-**Each member of your group** is required to submit the following for review:
-
-* The URL of the deployed application.
-
-* The URL of the GitHub repository, with a unique name and a README describing the project.
-
----
-© 2024 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+GitHub: [Martin Estrada](https://github.com/Mxrtinee)<br>
+GitHub: [Chris Lerwick](https://github.com/CrisCo116)<br>
+GitHub: [Sefufim Alvarez](https://github.com/sefu-alv)<br>
+GitHub: [Victor Romero Beltran](https://github.com/vromero-beltran)<br>
+GitHub: [Justin Schultz](https://github.com/justin-schultz37)<br>

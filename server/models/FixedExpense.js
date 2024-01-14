@@ -22,7 +22,7 @@ const fixedExpenseSchema = new Schema({
       category: {
         type: String,
         required: false, // Set to true if category is mandatory
-        enum: ['Mortgage/Rent', 'Food', 'Utilities', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Other'],
+        enum: ['Mortgage', 'Rent', 'Food', 'Utilities', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Other'],
       },
       userId: {
         type: Schema.Types.ObjectId,
