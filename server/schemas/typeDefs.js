@@ -17,9 +17,9 @@ type FixedExpense {
   }
 
   input AddFixedExpenseInput {
-    description: String!
-    expenseAmount: Float!
-    frequency: String!
+    description: String
+    expenseAmount: Float
+    frequency: String
     dueDate: String
     category: String
     userId: ID!
