@@ -1,5 +1,5 @@
-const { User, Income } = require('../models');
-const { User, FixedExpense } = require('../models');
+const { User, Income, FixedExpense } = require('../models');
+
 const bcrypt = require('bcrypt');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
@@ -57,7 +57,7 @@ const resolvers = {
                 });
             });
         },
-      
+
         addIncomeSource: async (_, { source, incomeAmount }, context) => {
             try {
                 if (!context.user) {
@@ -84,38 +84,38 @@ const resolvers = {
 
         addFixedExpense: async (_, { input }) => {
             try {
-              const newFixedExpense = new FixedExpense(input);
-              await newFixedExpense.save();
-              return newFixedExpense;
+                const newFixedExpense = new FixedExpense(input);
+                await newFixedExpense.save();
+                return newFixedExpense;
             } catch (error) {
-              console.error(error);
-              throw new Error('Error creating fixed expense');
+                console.error(error);
+                throw new Error('Error creating fixed expense');
             }
-          },
-          updateFixedExpense: async (_, { input }) => {
+        },
+        updateFixedExpense: async (_, { input }) => {
             try {
-              const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
-                 _id,
-                { $set: input },
-                { new: true }
-              );
-              return updatedFixedExpense;
+                const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
+                    _id,
+                    { $set: input },
+                    { new: true }
+                );
+                return updatedFixedExpense;
             } catch (error) {
-              console.error(error);
-              throw new Error('Error updating fixed expense');
+                console.error(error);
+                throw new Error('Error updating fixed expense');
             }
-          },
-          deleteFixedExpense: async (_, { _id }) => {
+        },
+        deleteFixedExpense: async (_, { _id }) => {
             try {
-              const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
-                _id
-              );
-              return deletedFixedExpense;
+                const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
+                    _id
+                );
+                return deletedFixedExpense;
             } catch (error) {
-              console.error(error);
-              throw new Error('Error deleting fixed expense');
+                console.error(error);
+                throw new Error('Error deleting fixed expense');
             }
-          }
+        }
     },
 };
 
