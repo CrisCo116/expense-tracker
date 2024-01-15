@@ -36,6 +36,7 @@ type FixedExpense {
   }
 
   type Income {
+    user: User!
     source: String
     incomeAmount: Float
     frequency: String

@@ -1,4 +1,4 @@
-const { User, FixedExpense, Income } = require('../models');
+const { User, Income, FixedExpense } = require('../models');
 const bcrypt = require('bcrypt');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
@@ -43,41 +43,67 @@ const resolvers = {
                 });
             });
         },
+      
+        addIncomeSource: async (_, { source, incomeAmount }, context) => {
+            try {
+                if (!context.user) {
+                    throw new Error('You must be logged in to add an income source');
+                }
+
+                const user = await User.findOne({ _id: context.user._id });
+
+                const newIncome = new Income({
+                    source,
+                    incomeAmount,
+                    frequency: 'monthly', // Set the frequency as needed
+                });
+
+                user.incomes.push(newIncome);
+                await user.save();
+
+                return newIncome;
+            } catch (error) {
+                console.error(error);
+                throw error; // Ensure you're re-throwing the error to let Apollo Client catch it
+            }
+        },
+
         addFixedExpense: async (_, { input }) => {
             try {
               console.log(input)
               const newFixedExpense = new FixedExpense(input);
               await newFixedExpense.save();
               return newFixedExpense;
+
             } catch (error) {
-              console.error(error);
-              throw new Error('Error creating fixed expense');
+                console.error(error);
+                throw new Error('Error creating fixed expense');
             }
-          },
-          updateFixedExpense: async (_, { input }) => {
+        },
+        updateFixedExpense: async (_, { input }) => {
             try {
-              const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
-                 _id,
-                { $set: input },
-                { new: true }
-              );
-              return updatedFixedExpense;
+                const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
+                    _id,
+                    { $set: input },
+                    { new: true }
+                );
+                return updatedFixedExpense;
             } catch (error) {
-              console.error(error);
-              throw new Error('Error updating fixed expense');
+                console.error(error);
+                throw new Error('Error updating fixed expense');
             }
-          },
-          deleteFixedExpense: async (_, { _id }) => {
+        },
+        deleteFixedExpense: async (_, { _id }) => {
             try {
-              const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
-                _id
-              );
-              return deletedFixedExpense;
+                const deletedFixedExpense = await FixedExpense.findByIdAndDelete(
+                    _id
+                );
+                return deletedFixedExpense;
             } catch (error) {
-              console.error(error);
-              throw new Error('Error deleting fixed expense');
+                console.error(error);
+                throw new Error('Error deleting fixed expense');
             }
-          }
+        }
     },
 };
 

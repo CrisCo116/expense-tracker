@@ -5,6 +5,22 @@ export const GET_USER = gql`
     getUser(userId: $userId) {
       _id
       email
+      fixedExpenses {
+        description
+        frequency
+        dueDate
+        category
+        userId
+      }
+      incomes {
+        user {
+          _id
+          email
+        }
+        source
+        incomeAmount
+        frequency
+      }
     }
   }
 `;

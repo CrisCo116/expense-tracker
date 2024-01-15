@@ -26,12 +26,14 @@ export default function Income() {
   });
   const [amountError, setAmountError] = useState(false);
 
-  const userId = localStorage.getItem('user_id');
+  const { loading, error, data: userData, refetch } = useQuery(GET_USER, {
+    variables: { userId: localStorage.getItem('user_id') }, // Pass the userId variable
+  });
+
 
   const [addIncomeSource] = useMutation(ADD_INCOME_SOURCE, {
     onCompleted: (data) => {
       console.log('Mutation completed:', data);
-
       // Update the state with the new income
       setIncomes([...incomes, data.addIncomeSource]); // Assuming 'addIncomeSource' is the key in your response
     },
@@ -40,18 +42,19 @@ export default function Income() {
     },
   });
 
-  const { loading, error, data: userData, refetch } = useQuery(GET_USER, {
-    variables: { userId },
-  });
-
-  useEffect(() => {
-    if (userData && userData.getUser && userData.getUser.profile) {
-      setIncomes(userData.getUser.profile.incomes);
-    }
-  }, [userData]);
-
   const [incomes, setIncomes] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    // Set user ID in local storage when page is loaded
+    if (userData && userData.getUser && userData.getUser._id) {
+      localStorage.setItem('user_id', userData.getUser._id);
+    }
+
+    if (userData && userData.getUser && userData.getUser.incomes) {
+      setIncomes(userData.getUser.incomes);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (loading === false) {
