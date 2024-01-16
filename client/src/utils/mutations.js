@@ -18,15 +18,14 @@ export const LOGIN_USER = gql`
       token
       user {
         email
-        _id
       }
     }
   }
 `;
 
 export const ADD_INCOME_SOURCE = gql`
-  mutation addIncomeSource($source: String!, $incomeAmount: Float!) {
-    addIncomeSource(source: $source, incomeAmount: $incomeAmount) {
+  mutation addIncomeSource($user_id: ID!, $source: String!, $incomeAmount: Float!) {
+    addIncomeSource(user_id: $user_id, source: $source, incomeAmount: $incomeAmount) {
       source
       incomeAmount
       frequency

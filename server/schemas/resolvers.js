@@ -39,7 +39,14 @@ const resolvers = {
                 // Use Mongoose query to populate incomes
                 const populatedUser = await User.findById(userId).populate('incomes');
 
-                return populatedUser.incomes;
+                if (!populatedUser || !populatedUser.incomes) {
+                    throw new Error('No incomes found for the user');
+                }
+
+                // Extract _id values from the incomes array
+                const incomeIds = populatedUser.incomes.map(income => income._id);
+
+                return incomeIds;
             } catch (error) {
                 console.error(error);
                 throw error;
@@ -78,13 +85,13 @@ const resolvers = {
             });
         },
 
-        addIncomeSource: async (_, { source, incomeAmount }, context) => {
+        addIncomeSource: async (_, { user_id, source, incomeAmount }, context) => {
             try {
                 if (!context.user) {
                     throw new Error('You must be logged in to add an income source');
                 }
 
-                const user = await User.findOne({ _id: context.user._id });
+                const user = await User.findOne({ _id: user_id || context.user._id });
 
                 const newIncome = new Income({
                     source,

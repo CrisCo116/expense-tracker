@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_USER = gql`
-  query GetUser($userId: ID!) {
-    getUser(userId: $userId) {
+  query GetUser {
+    getUser {
       _id
       email
       fixedExpenses {
@@ -10,13 +10,8 @@ export const GET_USER = gql`
         frequency
         dueDate
         category
-        userId
       }
       incomes {
-        user {
-          _id
-          email
-        }
         source
         incomeAmount
         frequency
