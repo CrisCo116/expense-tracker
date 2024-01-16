@@ -18,7 +18,7 @@ function useBodyClass(className) {
 }
 
 function App() {
-  useBodyClass('bg-white');
+  useBodyClass('bg-slate-200');
 
   const location = useLocation();
 

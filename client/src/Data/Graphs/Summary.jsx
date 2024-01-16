@@ -1,21 +1,32 @@
-// Import necessary dependencies
-import { Chart as ChartJS, defaults } from 'chart.js/auto'; // Import ChartJS library
-import { Doughnut } from 'react-chartjs-2'; // Import Bar chart component from react-chartjs-2
+import { Doughnut } from 'react-chartjs-2';
+import { Chart } from 'chart.js';
 
-import userData from '../UserData/ExpenseData'; // Import expense data
-
-// Modify default ChartJS configurations
-defaults.maintainAspectRatio = false; // Disable aspect ratio to adjust chart size
-defaults.responsive = true; // Enable responsiveness
-defaults.plugins.title.display = true; // Display title plugin by default
-defaults.plugins.title.align = "start"; // Align title text to the start
-defaults.plugins.title.font.size = 20; // Set title font size
-defaults.plugins.title.color = "black"; // Set title color
+Chart.defaults.plugins.title = Chart.defaults.plugins.title || { font: {} };
+Chart.defaults.plugins.title.font.size = 20; // Set title font size
+Chart.defaults.plugins.title.color = "black"; // Set title color
+import userFinanceData from '../UserData/ExpenseData';
 
 
 export default function SummaryGraph() {
-    
-    const allExpenses = userData.flatMap(user => user.expenses);
+    const allExpenses = userFinanceData.flatMap(user => user.expenses);
+    const totalExpenses = allExpenses.reduce((total, expense) => total + expense.amount, 0);
+
+    const plugins = [{
+        beforeDraw: function(chart) {
+            var width = chart.width,
+                height = chart.height,
+                ctx = chart.ctx;
+            ctx.restore();
+            var fontSize = "20";
+            ctx.font = fontSize + "px Arial";
+            ctx.textBaseline = "middle";
+            var text = "Total: $" + totalExpenses.toFixed(2),
+                textX = Math.round((width - ctx.measureText(text).width) / 2),
+                textY = height / 2;
+            ctx.fillText(text, textX, textY);
+            ctx.save();
+        } 
+    }];
 
     return (
         <div className='w-full flex justify-center'>
@@ -39,13 +50,13 @@ export default function SummaryGraph() {
                             ],
                         }}
                         options={{
-                            responsive: true, // Make the chart responsive
-                            maintainAspectRatio: false, // Allow the chart to resize based on its container's dimensions
-                            aspectRatio: 3, // Set the aspect ratio to a specific value (e.g., 2)
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            aspectRatio: 3,
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Summary',
+                                    text: 'Expenses by Category',
                                     padding: {
                                         top: 10,
                                         bottom: 30,
@@ -53,15 +64,15 @@ export default function SummaryGraph() {
                                     align: 'center',
                                 },
                                 legend: {
-                                    position: 'bottom', // Position the legend at the bottom of the chart
+                                    position: 'bottom',
                                     labels: {
-                                        padding: 20, // Add padding to the legend labels
+                                        padding: 20,
                                     },
                                 },
                             }, 
                             cutout: 100,
-                            
                         }}
+                        plugins={plugins}
                     />
                 </div>
             </div>

@@ -5,6 +5,7 @@ export const GET_USER = gql`
     getUser {
       _id
       email
+      name
       fixedExpenses {
         description
         frequency

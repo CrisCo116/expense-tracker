@@ -56,8 +56,8 @@ const LoginForm = () => {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto"
-            src="./src/assets/DALL·E 2024-01-03 18.30.23 - .png"
+            className="mx-auto bg-transparent"
+            src="LOGO.svg"
             alt="Your Company"
           />
           <h2 className="mt- mb-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

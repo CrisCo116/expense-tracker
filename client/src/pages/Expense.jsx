@@ -122,13 +122,19 @@ export default function Expenses() {
   };
 
   return (
-    <div className="expenses-container p-4">
-      <h1 className="text-2xl font-bold mb-4">Add Expense</h1>
+    <div className="expenses-container p-4 mb-[10rem] mt-[10rem]">
+      <div className='w-full flex justify-center'>
+      <h1 className="text-2xl font-bold mb-10">Add Expense</h1>
+      </div>
+      <div className='flex justify-center w-full'>
+
       {/* Form for adding or updating expenses */}
-      <form onSubmit={handleAddExpense} noValidate autoComplete="off" className="flex flex-col gap-4">
+      <form onSubmit={handleAddExpense} noValidate autoComplete="off" className=" flex justify-center gap-4 w-[95%] sm:w-1/2">
       {/* Input fields for expense data */}
+      <div className='w-full flex flex-col'>
+
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Amount"
           name="amount"
           type="number"
@@ -143,7 +149,7 @@ export default function Expenses() {
 
         {/* Description Field */}
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Where did you spend this money?"
           name="description"
           value={expenseData.description}
@@ -153,7 +159,7 @@ export default function Expenses() {
 
         {/* Category Field */}
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Category"
           name="category"
           value={expenseData.category}
@@ -178,7 +184,7 @@ export default function Expenses() {
 
         {/* Due Date Field */}
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Due Date"
           type="date"
           value={dueDate}
@@ -191,7 +197,7 @@ export default function Expenses() {
 
         {/* Repeat Frequency Field */}
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Repeat Frequency"
           name="repeat frequency"
           value={frequency}
@@ -219,7 +225,7 @@ export default function Expenses() {
         {showMoreOptions && (
           <>
             <TextField
-              className="w-1/2"
+              className="w-full"
               label="Check #"
               name="checkNumber"
               value={expenseData.checkNumber}
@@ -227,7 +233,7 @@ export default function Expenses() {
               margin="normal"
             />
             <TextField
-              className="w-1/2"
+              className="w-full"
               label="Note"
               name="note"
               value={expenseData.note}
@@ -238,12 +244,17 @@ export default function Expenses() {
         )}
 
         {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary" className="w-1/2">
+        <Button type="submit" variant="contained" color="primary" className="w-full sm:w-1/6">
           Add Expense
         </Button>
+        </div>
       </form>
 
+    </div>
+
       {/* Expenses Table */}
+      <div className='flex justify-center w-full'>
+        <div className='w-full sm:w-1/2'>
       <TableContainer component={Paper} className="mt-8">
         <Table>
           <TableHead>
@@ -276,6 +287,8 @@ export default function Expenses() {
         </TableBody>
         </Table>
       </TableContainer>
+      </div>
+      </div>
     </div>
   );
 }
