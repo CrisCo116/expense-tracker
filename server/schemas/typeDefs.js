@@ -51,6 +51,7 @@ type FixedExpense {
   type Query {
     users: [User]
     getUser(userId: ID!): User
+    loadIncome(userId: ID!): [Income]
   }
 
   type Mutation {

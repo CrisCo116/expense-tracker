@@ -24,6 +24,27 @@ const resolvers = {
                 throw error;
             }
         },
+        loadIncome: async (_, { userId }, context) => {
+            try {
+                if (!context.user) {
+                    throw new Error('You must be logged in to load income data');
+                }
+
+                const user = await User.findOne({ _id: userId });
+
+                if (!user) {
+                    throw new Error('User not found');
+                }
+
+                // Use Mongoose query to populate incomes
+                const populatedUser = await User.findById(userId).populate('incomes');
+
+                return populatedUser.incomes;
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        },
     },
     Mutation: {
         signup: async (parent, { email, password }) => {
