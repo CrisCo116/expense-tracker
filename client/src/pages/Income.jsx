@@ -111,8 +111,10 @@ export default function Income() {
         },
       });
 
-      // Reset form data
-      setIncomeData({ amount: '', source: '', frequency: 'Monthly', checkNumber: '', note: '' });
+      setIncomeData({
+        amount: '', source: '', frequency: 'Monthly', checkNumber: '', note   // Reset form data
+          : ''
+      });
 
       // Refetch user data to get the updated incomes
       refetch();
@@ -129,81 +131,81 @@ export default function Income() {
   return (
     <div className="income-container p-4 mb-[5rem] mt-[10rem]">
       <div className='flex justify-center'>
-      <h1 className="text-2xl font-bold mb-10">Add Income</h1>
+        <h1 className="text-2xl font-bold mb-10">Add Income</h1>
       </div>
       <div className='w-full flex justify-center'>
-      <form onSubmit={handleSubmit} noValidate autoComplete="off" className="flex justify-center w-[95%] sm:w-1/2 gap-4">
-        <div className='flex flex-col w-full'> 
-        <TextField
-          className="w-full"
-          label="Amount"
-          name="amount"
-          type="number"
-          value={incomeData.amount}
-          onChange={handleChange}
-          onClick={handleAmountClick}
-          onBlur={handleBlur}
-          error={amountError}
-          helperText={amountError ? 'Please enter an amount for this income' : ''}
-          margin="dense"
-        />
-        <TextField
-          className="w-full"
-          label="Source"
-          name="source"
-          value={incomeData.source}
-          onChange={handleChange}
-          margin="dense"
-        />
-        {/* Dropdown for Frequency */}
-        <Select
-          className="w-full mb-[2rem]"
-          label="Frequency"
-          name="frequency"
-          value={incomeData.frequency}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Frequency' }}
-          margin="dense"
-        >
-          <MenuItem value="" disabled>
-            Frequency
-          </MenuItem>
-          <MenuItem value="Monthly">Monthly</MenuItem>
-          {/* Add more frequency options as needed */}
-        </Select>
-        {/* ... other fields ... */}
-        <Button type="submit" variant="contained" color="primary" className="w-1/2 sm:w-1/4">
-          Add Income
-        </Button>
-        </div>
-      </form>
+        <form onSubmit={handleSubmit} noValidate autoComplete="off" className="flex justify-center w-[95%] sm:w-1/2 gap-4">
+          <div className='flex flex-col w-full'>
+            <TextField
+              className="w-full"
+              label="Amount"
+              name="amount"
+              type="number"
+              value={incomeData.amount}
+              onChange={handleChange}
+              onClick={handleAmountClick}
+              onBlur={handleBlur}
+              error={amountError}
+              helperText={amountError ? 'Please enter an amount for this income' : ''}
+              margin="dense"
+            />
+            <TextField
+              className="w-full"
+              label="Source"
+              name="source"
+              value={incomeData.source}
+              onChange={handleChange}
+              margin="dense"
+            />
+            {/* Dropdown for Frequency */}
+            <Select
+              className="w-full mb-[2rem]"
+              label="Frequency"
+              name="frequency"
+              value={incomeData.frequency}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Frequency' }}
+              margin="dense"
+            >
+              <MenuItem value="" disabled>
+                Frequency
+              </MenuItem>
+              <MenuItem value="Monthly">Monthly</MenuItem>
+              {/* Add more frequency options as needed */}
+            </Select>
+            {/* ... other fields ... */}
+            <Button type="submit" variant="contained" color="primary" className="w-1/2 sm:w-1/4">
+              Add Income
+            </Button>
+          </div>
+        </form>
       </div>
 
       {/* Table to display incomes */}
       <div className='flex justify-center w-full'>
         <div className='w-full sm:w-1/2'>
-      <TableContainer component={Paper} className="mt-8">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Amount</TableCell>
-              <TableCell>Source</TableCell>
-              <TableCell>Frequency</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {incomes.map((income, index) => (
-              <TableRow key={index}>
-                <TableCell>${income.incomeAmount}</TableCell>
-                <TableCell>{income.source}</TableCell>
-                <TableCell>{income.frequency}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      </div>
+          <TableContainer component={Paper} className="mt-8">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Source</TableCell>
+                  <TableCell>Frequency</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {incomes.map((income, index) => (
+                  <TableRow key={index}>
+                    <TableCell>${income.incomeAmount}</TableCell>
+                    <TableCell>{income.source}</TableCell>
+                    <TableCell>{income.frequency}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </div>
   );

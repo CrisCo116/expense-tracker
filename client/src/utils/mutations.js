@@ -34,17 +34,13 @@ export const ADD_INCOME_SOURCE = gql`
 `;
 
 export const ADD_EXPENSE = gql`
-  mutation AddExpense($input: AddFixedExpenseInput!) {
-    addFixedExpense(input: $input) {
-      id
-      description
-      amount
-      frequency
-      dueDate
-      category
-      userId
-    }
+mutation addFixedExpense($user_id: ID!, $description: String!, $expenseAmount: Float!) {
+  addFixedExpense(user_id: $user_id, description: $description, expenseAmount: $expenseAmount) {
+    description
+    expenseAmount
+    frequency
   }
+}
 `;
 
 export const UPDATE_EXPENSE = gql`
