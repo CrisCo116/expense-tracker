@@ -104,6 +104,7 @@ export default function Income() {
     try {
       await addIncomeSource({
         variables: {
+          user_id: localStorage.getItem('user_id'),
           source: incomeData.source,
           incomeAmount: parseFloat(incomeData.amount),
           frequency: incomeData.frequency,
@@ -184,8 +185,8 @@ export default function Income() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {incomes.map((income) => (
-              <TableRow key={income.source}>
+            {incomes.map((income, index) => (
+              <TableRow key={index}>
                 <TableCell>${income.incomeAmount}</TableCell>
                 <TableCell>{income.source}</TableCell>
                 <TableCell>{income.frequency}</TableCell>
