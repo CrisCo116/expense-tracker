@@ -1,27 +1,29 @@
 import { useState } from 'react';
 import SummaryGraph from "../Graphs/Summary";
 import MarketData from "../Graphs/MarketData";
+import ExchangeRate from '../Graphs/ExchangeRate';
 
 export default function Card() {
   const [activeSection, setActiveSection] = useState("Summary");
 
   return (
-    <div>
-      <div className="flex justify-center space-x-4">
+    <div className='ml-8 '>
+      <div className="flex justify-center  border-black border-b-4">
         <button
-          className={`cursor-pointer tablinks ${activeSection === "Summary" ? "active" : ""}`}
+          className={`cursor-pointer tablinks h-8 w-[12rem] rounded-md ${activeSection === "Summary" ? "bg-white" : ""}`}
           onClick={() => setActiveSection("Summary")}
         >
           Summary
         </button>
         <button
-          className={`cursor-pointer tablinks ${activeSection === "Transaction" ? "active" : ""}`}
+          className={`cursor-pointer tablinks h-8 w-[12rem] rounded-md ${activeSection === "Transaction" ? "bg-white" : ""}`}
           onClick={() => setActiveSection("Transaction")}
+          
         >
-          Transactions
+          Exchange Rate
         </button>
         <button
-          className={`cursor-pointer tablinks ${activeSection === "Market Data" ? "active" : ""}`}
+          className={`cursor-pointer tablinks h-8 w-[12rem] rounded-md ${activeSection === "Market Data" ? "bg-white" : ""}`}
           onClick={() => setActiveSection("Market Data")}
         >
           Market Data
@@ -34,12 +36,11 @@ export default function Card() {
       )}
       {activeSection === "Transaction" && (
         <div id="Transaction" className="tabcontent">
-          <h3>Transaction</h3>
+          <ExchangeRate />
         </div>
       )}
       {activeSection === "Market Data" && (
         <div id="Market Data" className="tabcontent">
-          <h3>Market Data</h3>
           <MarketData />
         </div>
       )}

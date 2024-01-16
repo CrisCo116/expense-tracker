@@ -127,11 +127,15 @@ export default function Income() {
   if (!isDataLoaded) return null;
 
   return (
-    <div className="income-container p-4">
-      <h1 className="text-2xl font-bold mb-4">Add Income</h1>
-      <form onSubmit={handleSubmit} noValidate autoComplete="off" className="flex flex-col gap-4">
+    <div className="income-container p-4 mb-[5rem] mt-[10rem]">
+      <div className='flex justify-center'>
+      <h1 className="text-2xl font-bold mb-10">Add Income</h1>
+      </div>
+      <div className='w-full flex justify-center'>
+      <form onSubmit={handleSubmit} noValidate autoComplete="off" className="flex justify-center w-[95%] sm:w-1/2 gap-4">
+        <div className='flex flex-col w-full'> 
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Amount"
           name="amount"
           type="number"
@@ -144,7 +148,7 @@ export default function Income() {
           margin="dense"
         />
         <TextField
-          className="w-1/2"
+          className="w-full"
           label="Source"
           name="source"
           value={incomeData.source}
@@ -153,7 +157,7 @@ export default function Income() {
         />
         {/* Dropdown for Frequency */}
         <Select
-          className="w-1/2"
+          className="w-full mb-[2rem]"
           label="Frequency"
           name="frequency"
           value={incomeData.frequency}
@@ -169,12 +173,16 @@ export default function Income() {
           {/* Add more frequency options as needed */}
         </Select>
         {/* ... other fields ... */}
-        <Button type="submit" variant="contained" color="primary" className="w-1/2">
+        <Button type="submit" variant="contained" color="primary" className="w-1/2 sm:w-1/4">
           Add Income
         </Button>
+        </div>
       </form>
+      </div>
 
       {/* Table to display incomes */}
+      <div className='flex justify-center w-full'>
+        <div className='w-full sm:w-1/2'>
       <TableContainer component={Paper} className="mt-8">
         <Table>
           <TableHead>
@@ -195,6 +203,8 @@ export default function Income() {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
+      </div>
     </div>
   );
 }

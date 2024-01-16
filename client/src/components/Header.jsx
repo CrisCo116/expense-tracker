@@ -20,7 +20,7 @@ export default function Nav() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="" className="h-8" alt="" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-lime-500 lg:text-5xl">SpendSmart</span>
+          <span className="self-center text-2xl font-semibold whitespace-nowrap text-sky-600 lg:text-5xl">SpendSmart</span>
         </Link>
         <button onClick={toggleMenu} type="button" className="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-hamburger" aria-expanded="false">
           <span className="sr-only">Open main menu</span>
@@ -41,7 +41,7 @@ export default function Nav() {
                 <Link to="/Income" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white">Income</Link>
               </li>
               <li>
-                <Link to="/Debt" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Debt (coming soon)</Link>
+                <Link to="#" onClick={(event) => event.preventDefault()} className="block py-2 px-3 text-gray-900 rounded cursor-not-allowed">Debt (coming soon)</Link>
               </li>
               <li>
                 <Link to="/login" onClick={handleLogout} className='block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' >Logout</Link>

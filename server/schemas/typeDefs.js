@@ -17,6 +17,7 @@ const typeDefs = `
     _id: ID!
     email: String!
     password: String!
+    name: String!
     fixedExpenses: [FixedExpense]!
     incomes: [Income]!
   }
@@ -33,7 +34,7 @@ const typeDefs = `
   }  
 
   type Mutation {
-    signup(email: String!, password: String!): Auth
+    signup(email: String!, password: String!, name: String!): Auth
     login(email: String!, password: String!): Auth
     signout: Message
     addIncomeSource(user_id: ID! source: String!, incomeAmount: Float!): Income

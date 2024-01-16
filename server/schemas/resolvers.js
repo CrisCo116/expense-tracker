@@ -54,8 +54,8 @@ const resolvers = {
         },
     },
     Mutation: {
-        signup: async (parent, { email, password }) => {
-            const user = await User.create({ email, password });
+        signup: async (parent, { email, password,name }) => {
+            const user = await User.create({ email, password, name });
             const token = signToken(user);
             return { token, user };
         },
@@ -109,16 +109,26 @@ const resolvers = {
             }
         },
 
-        addFixedExpense: async (_, { input }) => {
+        addFixedExpense: async (_, { input }, context) => {
             try {
                 console.log(input)
                 const newFixedExpense = new FixedExpense(input);
+        
+                // You need to save the new expense to the database
                 await newFixedExpense.save();
+        
+                // Also, if the User model has a reference to the expenses, you should add the new expense to the user
+                if (context.user) {
+                    const user = await User.findById(context.user._id);
+                    console.log(user)
+                    user.expenses.push(newFixedExpense);
+                    await user.save();
+                }
+        
                 return newFixedExpense;
-
             } catch (error) {
                 console.error(error);
-                throw new Error('Error creating fixed expense');
+                throw error; // Ensure you're re-throwing the error to let Apollo Client catch it
             }
         },
         updateFixedExpense: async (_, { input }) => {

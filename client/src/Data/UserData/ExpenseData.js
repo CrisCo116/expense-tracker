@@ -1,4 +1,4 @@
-const userData = [
+const userFinanceData = [
     {
       id: 1,
       name: 'John Doe',
@@ -7,36 +7,30 @@ const userData = [
         {
           id: 1,
           category: 'Food',
-          amount: 5,
+          amount: 260,
           date: '2022-01-01'
         },
         {
           id: 2,
           category: 'Transport',
-          amount: 2,
+          amount: 120,
           date: '2022-01-02'
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      expenses: [
+        },
         {
           id: 3,
           category: 'Rent',
-          amount: 100,
-          date: '2022-01-01'
+          amount: 800.43,
+          date: '2022-01-03'
         },
         {
           id: 4,
           category: 'Utilities',
-          amount: 5,
-          date: '2022-01-02'
+          amount: 200,
+          date: '2022-01-04'
         }
       ]
-    }
+    },
+    
   ];
 
-export default userData;
+export default userFinanceData;

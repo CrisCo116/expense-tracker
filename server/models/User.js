@@ -14,6 +14,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    name: {
+        type: String,
+        required: true,
+    },
     fixedExpenses: [FixedExpense.schema], // Use .schema to get the schema from the model
     incomes: [Income.schema], // Use .schema to get the schema from the model
 });
