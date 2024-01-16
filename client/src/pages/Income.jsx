@@ -32,10 +32,24 @@ export default function Income() {
 
 
   const [addIncomeSource] = useMutation(ADD_INCOME_SOURCE, {
-    onCompleted: (data) => {
-      console.log('Mutation completed:', data);
-      // Update the state with the new income
-      setIncomes([...incomes, data.addIncomeSource]); // Assuming 'addIncomeSource' is the key in your response
+    update: (cache, { data }) => {
+      const existingUserData = cache.readQuery({
+        query: GET_USER,
+        variables: { userId: localStorage.getItem('user_id') },
+      });
+
+      const newIncome = data.addIncomeSource;
+
+      cache.writeQuery({
+        query: GET_USER,
+        variables: { userId: localStorage.getItem('user_id') },
+        data: {
+          getUser: {
+            ...existingUserData.getUser,
+            incomes: [...existingUserData.getUser.incomes, newIncome],
+          },
+        },
+      });
     },
     onError: (error) => {
       console.error(error);

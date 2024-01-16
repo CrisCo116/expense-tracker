@@ -1,11 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const incomeSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
     source: {
         type: String,
         required: true,
@@ -24,3 +19,4 @@ const incomeSchema = new Schema({
 const Income = model('Income', incomeSchema);
 
 module.exports = Income;
+

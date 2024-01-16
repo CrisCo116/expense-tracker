@@ -1,72 +1,72 @@
 const typeDefs = `
-  type User {
-    _id: ID!
-    email: String!
-    fixedExpenses: [FixedExpense]
-    incomes: [Income]
+  type Income {
+    source: String!
+    incomeAmount: Float!
+    frequency: String!
   }
-  
-type FixedExpense {
-    id: ID!
+
+  type FixedExpense {
     description: String!
     amount: Float!
     frequency: String!
     dueDate: String
     category: String
-    userId: ID!
   }
 
-  input AddFixedExpenseInput {
-    description: String
-    amount: Float
-    frequency: String
-    dueDate: String
-    category: String
-    userId: ID!
+  type User {
+    _id: ID!
+    email: String!
+    password: String!
+    fixedExpenses: [FixedExpense]!
+    incomes: [Income]!
   }
 
-  input UpdateFixedExpenseInput {
-    id: ID!
-    description: String
-    amount: Float
-    frequency: String
-    dueDate: String
-    category: String
-    userId: ID
-  }
-
-  type Income {
-    user: User!
-    source: String
-    incomeAmount: Float
-    frequency: String
-  }
-
-  input IncomeInput {
-    source: String
-    incomeAmount: Float
-    frequency: String
+  type Auth {
+    token: ID!
+    user: User
   }
 
   type Query {
-    users: [User]
-    getUser(userId: ID!): User
-    loadIncome(userId: ID!): [Income]
-  }
+    users: User
+    getUser: User
+    loadIncome: [ID!]!
+  }  
 
   type Mutation {
-    signout: String
     signup(email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addIncomeSource(source: String!, incomeAmount: Float!): Income
-    addFixedExpense(input: AddFixedExpenseInput!): FixedExpense
-    updateFixedExpense(input: UpdateFixedExpenseInput!): FixedExpense
-    deleteFixedExpense(id: ID!): String
-}
+    signout: Message
+    addIncomeSource(user_id: ID! source: String!, incomeAmount: Float!): Income
+    addFixedExpense(input: FixedExpenseInput): FixedExpense
+    updateFixedExpense(input: UpdateFixedExpenseInput): FixedExpense
+    deleteFixedExpense(_id: ID!): FixedExpense
+  }
 
-  type Auth {
-    token: ID
-    user: User
+  input incomeInput {
+    source: String!
+    incomeAmount: Float!
+    frequency: String!
+  }
+
+  input FixedExpenseInput {
+    description: String!
+    amount: Float!
+    frequency: String!
+    dueDate: String
+    category: String
+  }
+
+  input UpdateFixedExpenseInput {
+    _id: ID!
+    description: String
+    amount: Float
+    frequency: String
+    dueDate: String
+    category: String
+  }
+
+  type Message {
+    message: String
   }
 `;
 

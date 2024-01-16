@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-const { FixedExpense } = require('./FixedExpense');
-const { Income } = require('./Income');
+const FixedExpense = require('./FixedExpense');
+const Income = require('./Income');
 
 const userSchema = new Schema({
     email: {
@@ -14,27 +14,19 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    fixedExpenses: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'FixedExpense',
-        },
-    ],
-    incomes: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Income',
-        },
-    ],
+    fixedExpenses: [FixedExpense.schema], // Use .schema to get the schema from the model
+    incomes: [Income.schema], // Use .schema to get the schema from the model
 });
 
 userSchema.pre('find', function (next) {
-    this.populate('fixedExpenses incomes');
+    this.populate('fixedExpenses');
+    this.populate('incomes');
     next();
 });
 
 userSchema.pre('findOne', function (next) {
-    this.populate('fixedExpenses incomes');
+    this.populate('fixedExpenses');
+    this.populate('incomes');
     next();
 });
 
