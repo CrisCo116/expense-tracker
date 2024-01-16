@@ -8,9 +8,9 @@ export const GET_USER = gql`
       name
       fixedExpenses {
         description
+        expenseAmount
         frequency
-        dueDate
-        category
+
       }
       incomes {
         source

@@ -6,26 +6,16 @@ const fixedExpenseSchema = new Schema({
         required: true,
         trim: true,
     },
-    amount: {
+    expenseAmount: {
         type: Number,
         required: true,
     },
     frequency: {
         type: String,
         required: true,
-        enum: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+        enum: ['daily', 'weekly', 'monthly', 'yearly'],
     },
-    dueDate: {
-        type: Date,
-    },
-    category: {
-        type: String,
-        enum: ['Mortgage', 'Rent', 'Food', 'Utilities', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Other'],
-    },
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    },
+
 });
 
 const FixedExpense = model('FixedExpense', fixedExpenseSchema);

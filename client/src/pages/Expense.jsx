@@ -1,293 +1,209 @@
-import { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Switch, FormControlLabel, FormGroup } from '@mui/material';
-import { ADD_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE } from '../utils/mutations';
+import { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Select,
+  MenuItem,
+} from '@mui/material'; import { ADD_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE } from '../utils/mutations';
+import { GET_USER } from '../utils/queries';
 
 export default function Expenses() {
   // State hooks for various components of the expense data
   const [expenseData, setExpenseData] = useState({
     amount: '0.00',
     description: '',
-    category: '',
+    frequency: 'Monthly',
     checkNumber: '',
     note: '',
   });
 
-  // State for additional UI elements
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [amountError, setAmountError] = useState(false);
 
-  // Apollo Client mutations
-  const [addExpenseMutation] = useMutation(ADD_EXPENSE);
-  const [updateExpenseMutation] = useMutation(UPDATE_EXPENSE);
-  const [deleteExpenseMutation] = useMutation(DELETE_EXPENSE);
+  const { loading, error, data: userData, refetch } = useQuery(GET_USER, {
+    variables: { userId: localStorage.getItem('user_id') }, // Pass the userId variable
+  });
 
-  // States for date and frequency inputs
-  const [dueDate, setDueDate] = useState('');
-  const [frequency, setFrequency] = useState('');
+  const [addFixedExpense] = useMutation(ADD_EXPENSE, {
+    update: (cache, { data }) => {
+      const existingUserData = cache.readQuery({
+        query: GET_USER,
+        variables: { userId: localStorage.getItem('user_id') },
+      });
 
-  // Mock expenses data state
-  const [expenses, setExpenses] = useState([
-    // Initial mock data for testing
-    { id: 1, amount: 50, description: 'Groceries', category: 'Food', dueDate: '2024-01-01' },
-    { id: 2, amount: 20, description: 'Bus ticket', category: 'Transportation', dueDate: '2024-01-02' },
-  ]);
+      const newExpense = data.addFixedExpense;
 
-  // Event handler to select the amount input text
-  const handleAmountClick = (event) => {
-  event.target.select();
-  };
+      cache.writeQuery({
+        query: GET_USER,
+        variables: { userId: localStorage.getItem('user_id') },
+        data: {
+          getUser: {
+            ...existingUserData.getUser,
+            fixedExpenses: [...existingUserData.getUser.fixedExpenses, newExpense],
+          },
+        },
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
-  // Event handler for when input loses focus
+  const [fixedExpenses, setFixedExpenses] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    // Set user ID in local storage when page is loaded
+    if (userData && userData.getUser && userData.getUser._id) {
+      localStorage.setItem('user_id', userData.getUser._id);
+    }
+
+    if (userData && userData.getUser && userData.getUser.fixedExpenses) {
+      setFixedExpenses(userData.getUser.fixedExpenses);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (loading === false) {
+      setIsDataLoaded(true);
+    }
+  }, [loading]);
+
   const handleBlur = (event) => {
-    if (event.target.name === "amount" && (!event.target.value.trim() || parseFloat(event.target.value) === 0)) {
+    if (!event.target.value.trim()) {
       setExpenseData({ ...expenseData, amount: '0.00' });
       setAmountError(true);
-    }
-  };
-
-  // General input change handler
-  const handleChange = (event) => {
-   const { name, value } = event.target;
-   setExpenseData({ ...expenseData, [name]: value });
-
-    if (name === "amount" && value.trim() && parseFloat(value) !== 0) {
+    } else {
       setAmountError(false);
     }
   };
 
-  // Handler for adding a new expense
-  const handleAddExpense = async (event) => {
+  const handleAmountClick = (event) => {
+    event.target.select();
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setExpenseData({ ...expenseData, [name]: value });
+
+    // Reset amountError if a valid amount is entered
+    if (name === 'amount' && value.trim() && parseFloat(value) !== 0) {
+      setAmountError(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        // Prepare the expense data for mutation
-        const expenseInput = {
-            description: expenseData.description,
-            amount: parseFloat(expenseData.amount),
-            dueDate: dueDate,
-            frequency: frequency,
-            category: expenseData.category,
-            userId: '659e1502e08faca90ac7c039' // Example user ID, replace with actual user ID
-        };
-        console.log('Adding expense with data:', expenseInput);
-        const { data } = await addExpenseMutation({
-            variables: { input: expenseInput }
-        });
-        // Reset form fields
-        if (data && data.addFixedExpense) {
-            setExpenses([...expenses, data.addFixedExpense]);
-            setExpenseData({ amount: '0.00', description: '', category: ''});
-            setDueDate('');
-            setFrequency('');
-        }
+      await addFixedExpense({
+        variables: {
+          user_id: localStorage.getItem('user_id'),
+          description: expenseData.description,
+          expenseAmount: parseFloat(expenseData.amount),
+          frequency: expenseData.frequency,
+        },
+      });
+
+      // Reset form data
+      setExpenseData({ amount: '', description: '', frequency: 'Monthly', checkNumber: '', note: '' });
+
+      // Refetch user data to get the updated incomes
+      refetch();
     } catch (error) {
-        console.error('Error adding expense:', error);
-        if (error.networkError) {
-          console.error('Network error:', error.networkError);
-      }
-      if (error.graphQLErrors) {
-          error.graphQLErrors.forEach(err => console.error('GraphQL error:', err));
-      }
-  }
-};
-  
-  // Handler for updating an existing expense
-  const handleUpdateExpense = async (expenseId) => {
-    try {
-        const { data } = await updateExpenseMutation({ variables: { input: { ...expenseData, id: expenseId } } });
-        setExpenses(expenses.map(exp => exp.id === expenseId ? data.updateFixedExpense : exp));
-    } catch (error) {
-        console.error('Error updating expense:', error);
+      console.error(error);
     }
   };
 
-  // Handler for deleting an existing expense
-  const handleDeleteExpense = async (expenseId) => {
-    try {
-        await deleteExpenseMutation({ variables: { id: expenseId } });
-        setExpenses(expenses.filter(exp => exp.id !== expenseId));
-    } catch (error) {
-        console.error('Error deleting expense:', error);
-    }
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  // Event handler for changes in due date
-  const handleDueDateChange = (event) => {
-    setDueDate(event.target.value);
-  };
-
-  // Event handler for changes in frequency
-  const handleFrequencyChange = (event) => {
-    setFrequency(event.target.value);
-  };
+  if (!isDataLoaded) return null;
 
   return (
-    <div className="expenses-container p-4 mb-[10rem] mt-[10rem]">
-      <div className='w-full flex justify-center'>
-      <h1 className="text-2xl font-bold mb-10">Add Expense</h1>
+    <div className="income-container p-4 mb-[5rem] mt-[10rem]">
+      <div className='flex justify-center'>
+        <h1 className="text-2xl font-bold mb-10">Add Fixed Expense</h1>
       </div>
-      <div className='flex justify-center w-full'>
-
-      {/* Form for adding or updating expenses */}
-      <form onSubmit={handleAddExpense} noValidate autoComplete="off" className=" flex justify-center gap-4 w-[95%] sm:w-1/2">
-      {/* Input fields for expense data */}
-      <div className='w-full flex flex-col'>
-
-        <TextField
-          className="w-full"
-          label="Amount"
-          name="amount"
-          type="number"
-          value={expenseData.amount}
-          onChange={handleChange}
-          onClick={handleAmountClick}
-          onBlur={handleBlur}
-          margin="normal"
-          error={amountError}
-          helperText={amountError ? "Please enter an amount for this transaction" : ""}
-        />
-
-        {/* Description Field */}
-        <TextField
-          className="w-full"
-          label="Where did you spend this money?"
-          name="description"
-          value={expenseData.description}
-          onChange={handleChange}
-          margin="normal"
-        />
-
-        {/* Category Field */}
-        <TextField
-          className="w-full"
-          label="Category"
-          name="category"
-          value={expenseData.category}
-          onChange={handleChange}
-          select
-          SelectProps={{
-            native: true,
-          }}
-          margin="normal"
-        >
-          <option value=""></option>
-          <option value="Mortgage">Mortgage</option>
-          <option value="Rent">Rent</option>
-          <option value="Food">Food</option>
-          <option value="Utilities">Utilities</option>
-          <option value="Transportation">Transportation</option>
-          <option value="Entertainment">Entertainment</option>
-          <option value="Health">Health</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Other">Other</option>
-        </TextField>
-
-        {/* Due Date Field */}
-        <TextField
-          className="w-full"
-          label="Due Date"
-          type="date"
-          value={dueDate}
-          onChange={handleDueDateChange}
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-
-        {/* Repeat Frequency Field */}
-        <TextField
-          className="w-full"
-          label="Repeat Frequency"
-          name="repeat frequency"
-          value={frequency}
-          onChange={handleFrequencyChange}
-          select
-          SelectProps={{
-            native: true,
-          }}
-          margin="normal"
-        >
-          <option value=""></option>
-          <option value="Daily">Daily</option>
-          <option value="Weekly">Weekly</option>
-          <option value="Monthly">Monthly</option>
-          <option value="Yearly">Yearly</option>
-        </TextField>
-
-        {/* More Options */}
-        <FormGroup>
-          <FormControlLabel 
-            control={<Switch checked={showMoreOptions} onChange={() => setShowMoreOptions(!showMoreOptions)} />}
-            label="+More Options"
-          />
-        </FormGroup>
-        {showMoreOptions && (
-          <>
+      <div className='w-full flex justify-center'>
+        <form onSubmit={handleSubmit} noValidate autoComplete="off" className="flex justify-center w-[95%] sm:w-1/2 gap-4">
+          <div className='flex flex-col w-full'>
             <TextField
               className="w-full"
-              label="Check #"
-              name="checkNumber"
-              value={expenseData.checkNumber}
+              label="Amount"
+              name="amount"
+              type="number"
+              value={expenseData.amount}
               onChange={handleChange}
-              margin="normal"
+              onClick={handleAmountClick}
+              onBlur={handleBlur}
+              error={amountError}
+              helperText={amountError ? 'Please enter an amount for this expense' : ''}
+              margin="dense"
             />
             <TextField
               className="w-full"
-              label="Note"
-              name="note"
-              value={expenseData.note}
+              label="Description"
+              name="description"
+              value={expenseData.description}
               onChange={handleChange}
-              margin="normal"
+              margin="dense"
             />
-          </>
-        )}
+            {/* Dropdown for Frequency */}
+            <Select
+              className="w-full mb-[2rem]"
+              label="Frequency"
+              name="frequency"
+              value={expenseData.frequency}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Frequency' }}
+              margin="dense"
+            >
+              <MenuItem value="" disabled>
+                Frequency
+              </MenuItem>
+              <MenuItem value="Monthly">Monthly</MenuItem>
+              {/* Add more frequency options as needed */}
+            </Select>
+            {/* ... other fields ... */}
+            <Button type="submit" variant="contained" color="primary" className="w-1/2 sm:w-1/4">
+              Add Fixed Expense
+            </Button>
+          </div>
+        </form>
+      </div>
 
-        {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary" className="w-full sm:w-1/6">
-          Add Expense
-        </Button>
-        </div>
-      </form>
-
-    </div>
-
-      {/* Expenses Table */}
+      {/* Table to display incomes */}
       <div className='flex justify-center w-full'>
         <div className='w-full sm:w-1/2'>
-      <TableContainer component={Paper} className="mt-8">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Amount</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Due Date</TableCell>
-              <TableCell>Frequency</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* Mapping over expenses to display each as a table row */}
-            {expenses.map((expense) => (
-            <TableRow key={expense.id}>
-            {/* Displaying expense data in table cells */}
-            <TableCell>${expense.amount}</TableCell>
-            <TableCell>{expense.description}</TableCell>
-            <TableCell>{expense.category}</TableCell>
-            <TableCell>{new Date(expense.dueDate).toLocaleDateString()}</TableCell>
-            <TableCell>{expense.frequency}</TableCell>
-            <TableCell>
-              <Button onClick={() => handleUpdateExpense(expense.id)}>Update</Button>
-            </TableCell>
-            <TableCell>
-              <Button onClick={() => handleDeleteExpense(expense.id)}>Delete</Button>
-            </TableCell>
-          </TableRow>
-          ))}
-        </TableBody>
-        </Table>
-      </TableContainer>
-      </div>
+          <TableContainer component={Paper} className="mt-8">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Frequency</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {fixedExpenses.map((expense, index) => (
+                  <TableRow key={index}>
+                    <TableCell>${expense.expenseAmount}</TableCell>
+                    <TableCell>{expense.description}</TableCell>
+                    <TableCell>{expense.frequency}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </div>
   );
