@@ -127,7 +127,7 @@ export default function Expenses() {
   if (!isDataLoaded) return null;
 
   return (
-    <div className="income-container p-4 mb-[5rem] mt-[10rem]">
+    <div className="income-container p-4 mb-[5rem] mt-[5rem] sm:mt-[10rem]">
       <div className='flex justify-center'>
         <h1 className="text-2xl font-bold mb-10">Add Fixed Expense</h1>
       </div>
