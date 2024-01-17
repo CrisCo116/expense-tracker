@@ -1,3 +1,5 @@
+import { presets } from '@babel/env';
+
 module.exports = {
     presets: [
         "@babel/preset-env",

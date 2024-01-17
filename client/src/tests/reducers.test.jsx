@@ -1,44 +1,49 @@
 import { loginReducer, signupReducer, expensesReducer } from './reducers';
 import * as actions from '../utils/actions';
-
+import {describe, it, expect} from 'mocha'; 
 import { render, screen, fireEvent } from '@testing-library/react';
 import Expenses from './Expenses';
 import { createStore } from "redux";
+import { Provider } from 'react-redux';
 
 describe('Expenses', () => {
 
   const store = createStore(expensesReducer);
-  
-  it.todo('adds expense to store', () => {
-
+  it.todo("adds expense to store", () => {
     // Render component with store
     render(
       <Provider store={store}>
-        <Expenses />  
+        <Expenses />
       </Provider>
     );
 
     // Dispatch action to add expense
-    store.dispatch(addExpense({
-      amount: 50,
-      description: 'Lunch' 
-    }));
+    const addExpense = (expense) => ({
+      type: "ADD_EXPENSE",
+      expense,
+    });
+
+    store.dispatch(
+      addExpense({
+        amount: 50,
+        description: "Lunch",
+      })
+    );
 
     // Assert store was updated
-    expect(store.getState()).toEqual([{
-      amount: 50, 
-      description: 'Lunch'
-    }]);
-
+    expect(store.getState().expenses).toEqual([
+      {
+        amount: 50,
+        description: "Lunch",
+      },
+    ]);
   });
-
   it.todo('requires expense amount', () => {
       render(<Expenses />);
       fireEvent.change(screen.getByLabelText('Where did you spend this money?'), { target: { value: 'Groceries' } });
       fireEvent.click(screen.getByText('Add Expense'));
       expect(screen.getByText('Amount is required')).toBeInTheDocument();
     });
-
 it.todo('adds new expense on submit', async () => {
   render(<Expenses />);
   fireEvent.change(screen.getByLabelText('Amount'), { target: { value: '50' } });
@@ -50,14 +55,12 @@ it.todo('adds new expense on submit', async () => {
   expect(screen.getByText('$50')).toBeInTheDocument();
   expect(screen.getByText('Groceries')).toBeInTheDocument();
 });
-
 it.todo('requires expense description', () => {
   render(<Expenses />);
   fireEvent.change(screen.getByLabelText('Amount'), { target: { value: '50' } });
   fireEvent.click(screen.getByText('Add Expense'));
   expect(screen.getByText('Description is required')).toBeInTheDocument();
 });
-
 it.todo('clears expenses on logout', () => {
   render(<Expenses />);
   
@@ -72,7 +75,6 @@ it.todo('clears expenses on logout', () => {
   const rows = screen.getAllByRole('row');
   expect(rows).toHaveLength(1); // only initial row
 });
-
 it.todo('displays error on failed add', async () => {
   server.use(rest.post('/expenses', (req, res, ctx) => {
     return res(ctx.status(500));
@@ -86,7 +88,6 @@ it.todo('displays error on failed add', async () => {
 
   expect(await screen.findByText('Failed to add expense')).toBeInTheDocument();
 });
-
 it.todo('updates expense on update click', async () => {
   render(<Expenses />);
   
@@ -102,7 +103,6 @@ it.todo('updates expense on update click', async () => {
 
   expect(screen.getByText('$60')).toBeInTheDocument();
 });
-
 it.todo('deletes expense on delete click', async () => {
   render(<Expenses />);
   
@@ -116,7 +116,6 @@ it.todo('deletes expense on delete click', async () => {
   const rows = await screen.findAllByRole('row');
   expect(rows).toHaveLength(1); // only initial row
 });
-
 });
 
 describe('signupReducer', () => {
