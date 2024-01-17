@@ -7,7 +7,7 @@ export default function Card() {
   const [activeSection, setActiveSection] = useState("Summary");
 
   return (
-    <div className='ml-8 '>
+    <div className='ml-8 text-[13px] font-bold '>
       <div className="flex justify-center  border-black border-b-4">
         <button
           className={`cursor-pointer tablinks h-8 w-[12rem] rounded-md ${activeSection === "Summary" ? "bg-white" : ""}`}

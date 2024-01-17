@@ -1,15 +1,54 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart } from 'chart.js';
-
+import { GET_USER } from "../../utils/queries"
+import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
 Chart.defaults.plugins.title = Chart.defaults.plugins.title || { font: {} };
 Chart.defaults.plugins.title.font.size = 20; // Set title font size
 Chart.defaults.plugins.title.color = "black"; // Set title color
-import userFinanceData from '../UserData/ExpenseData';
+
 
 
 export default function SummaryGraph() {
-    const allExpenses = userFinanceData.flatMap(user => user.expenses);
-    const totalExpenses = allExpenses.reduce((total, expense) => total + expense.amount, 0);
+    const [fixedExpenses, setFixedExpenses] = useState([]);
+ 
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  const {
+    loading,
+    error,
+    data: userData,
+  } = useQuery(GET_USER, {
+    variables: { userId: localStorage.getItem("user_id") },
+  });
+
+  useEffect(() => {
+    if (userData && userData.getUser) {
+      if (userData.getUser.fixedExpenses) {
+        setFixedExpenses(userData.getUser.fixedExpenses);
+      }
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (loading === false) {
+      setIsDataLoaded(true);
+    }
+  }, [loading]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  if (!isDataLoaded) return null;
+  console.log(fixedExpenses);
+
+  // get total expenses
+  // get total expenses
+const totalExpense = fixedExpenses.reduce(
+  (total, expense) => total + parseFloat(expense.expenseAmount),
+  0
+);
+   
 
     const plugins = [{
         beforeDraw: function(chart) {
@@ -20,7 +59,7 @@ export default function SummaryGraph() {
             var fontSize = "20";
             ctx.font = fontSize + "px Arial";
             ctx.textBaseline = "middle";
-            var text = "Total: $" + totalExpenses.toFixed(2),
+            var text = "Total: $" + totalExpense.toFixed(2),
                 textX = Math.round((width - ctx.measureText(text).width) / 2),
                 textY = height / 2;
             ctx.fillText(text, textX, textY);
@@ -34,11 +73,11 @@ export default function SummaryGraph() {
                 <div className='w-full h-[25rem]'> 
                     <Doughnut
                         data={{
-                            labels: allExpenses.map((expense) => expense.category),
+                            labels: fixedExpenses.map((expense) => expense.description),
                             datasets: [
                                 {
                                     label: 'Cost',
-                                    data: allExpenses.map((expense) => expense.amount),
+                                    data: fixedExpenses.map((expense) => parseFloat(expense.expenseAmount)),
                                     backgroundColor: [
                                         'red',
                                         'green',
