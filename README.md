@@ -76,10 +76,12 @@ THEN I can use all its features as intended, with consistent performance and dat
 
 The following image shows the Expense Tracker application's appearance and functionality:
 
-![Homepage of website.](./public/images/.png)
+![Homepage of website.](./public/src/assets/spendsmartscreenshot.png)
+![Dash board/summary](./public/src/assets/shot2.png)
+![Dash board/exchange rate](./public/src/assets/shot3.png)
 
 ## Links
-Deployed Application: [SpendSmart Live](https://spendsmartapp.render.com)<br>
+Deployed Application: [SpendSmart Live](https://spendsmart-yq4j.onrender.com/)<br>
 
 Github Repository: [SpendSmart Repo](https://github.com/CrisCo116/expense-tracker)
 
