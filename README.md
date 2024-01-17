@@ -76,9 +76,9 @@ THEN I can use all its features as intended, with consistent performance and dat
 
 The following image shows the Expense Tracker application's appearance and functionality:
 
-![Homepage of website.](./public/src/assets/spendsmartscreenshot.png)
-![Dash board/summary](./public/src/assets/shot2.png)
-![Dash board/exchange rate](./public/src/assets/shot3.png)
+![Homepage of website.](client\src\assets\spendsmartscreenshot.jpeg)
+![Dash board/summary](client\src\assets\shot2.jpeg)
+![Dash board/exchange rate](./client\src\assets\shot3.jpeg)
 
 ## Links
 Deployed Application: [SpendSmart Live](https://spendsmart-yq4j.onrender.com/)<br>
